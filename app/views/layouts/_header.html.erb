@@ -1,0 +1,10 @@
+<% if user_signed_in? %>
+	<% if current_user.signup_status == "completed" %>
+		<li><%= link_to "Home", root_url %></li>
+		<li>Hey, <%= current_user.first_name %></li>
+		<li><%= link_to "Logout", destroy_user_session_path %></li>
+	<% end %>
+<% else %>
+	<li><%= link_to "Home", root_url %></li>
+	<li><%= link_to "Login/Signup", new_user_session_path %></li>
+<% end %>

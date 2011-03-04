@@ -1,0 +1,32 @@
+<% title "Group" %>
+
+<p>
+  <strong>Name:</strong>
+  <%= @group.name %>
+</p>
+<p>
+  <strong>Description:</strong>
+  <%= @group.description %>
+</p>
+<p>
+  <strong>Invited Users:</strong>
+  <%= @group.invited_users %>
+</p>
+<p>
+  <strong>Max Members:</strong>
+  <%= @group.max_members %>
+</p>
+<p>
+  <strong>Total Members:</strong>
+  <%= @group.total_members %>
+</p>
+<p>
+  <strong>Privacy:</strong>
+  <%= @group.privacy %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_group_path(@group) %> |
+  <%= link_to "Destroy", @group, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", groups_path %>
+</p>

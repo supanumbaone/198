@@ -1,0 +1,20 @@
+<% title "Schedule" %>
+
+<p>
+  <strong>Name:</strong>
+  <%= @schedule.name %>
+</p>
+<p>
+  <strong>Description:</strong>
+  <%= @schedule.description %>
+</p>
+<p>
+  <strong>User:</strong>
+  <%= @schedule.user_id %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_schedule_path(@schedule) %> |
+  <%= link_to "Destroy", @schedule, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", schedules_path %>
+</p>

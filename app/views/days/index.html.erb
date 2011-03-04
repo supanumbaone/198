@@ -1,0 +1,23 @@
+<% title "Days" %>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Date</th>
+    <th>Description</th>
+    <th>Schedule</th>
+  </tr>
+  <% for day in @days %>
+    <tr>
+      <td><%= day.name %></td>
+      <td><%= day.date %></td>
+      <td><%= day.description %></td>
+      <td><%= day.schedule_id %></td>
+      <td><%= link_to "Show", day %></td>
+      <td><%= link_to "Edit", edit_day_path(day) %></td>
+      <td><%= link_to "Destroy", day, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to "New Day", new_day_path %></p>

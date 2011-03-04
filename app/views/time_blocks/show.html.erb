@@ -1,0 +1,32 @@
+<% title "Time Block" %>
+
+<p>
+  <strong>Name:</strong>
+  <%= @time_block.name %>
+</p>
+<p>
+  <strong>Start Time:</strong>
+  <%= @time_block.start_time %>
+</p>
+<p>
+  <strong>End Time:</strong>
+  <%= @time_block.end_time %>
+</p>
+<p>
+  <strong>Chunk Of Time:</strong>
+  <%= @time_block.chunk_of_time %>
+</p>
+<p>
+  <strong>Description:</strong>
+  <%= @time_block.description %>
+</p>
+<p>
+  <strong>Day:</strong>
+  <%= @time_block.day_id %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_time_block_path(@time_block) %> |
+  <%= link_to "Destroy", @time_block, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", time_blocks_path %>
+</p>

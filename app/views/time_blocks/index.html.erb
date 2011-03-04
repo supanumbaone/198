@@ -1,0 +1,27 @@
+<% title "Time Blocks" %>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Start Time</th>
+    <th>End Time</th>
+    <th>Chunk Of Time</th>
+    <th>Description</th>
+    <th>Day</th>
+  </tr>
+  <% for time_block in @time_blocks %>
+    <tr>
+      <td><%= time_block.name %></td>
+      <td><%= time_block.start_time %></td>
+      <td><%= time_block.end_time %></td>
+      <td><%= time_block.chunk_of_time %></td>
+      <td><%= time_block.description %></td>
+      <td><%= time_block.day_id %></td>
+      <td><%= link_to "Show", time_block %></td>
+      <td><%= link_to "Edit", edit_time_block_path(time_block) %></td>
+      <td><%= link_to "Destroy", time_block, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to "New Time Block", new_time_block_path %></p>

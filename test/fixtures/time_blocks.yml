@@ -1,0 +1,15 @@
+one:
+  name: MyString
+  start_time: 2011-02-28 02:16:40
+  end_time: 2011-02-28 02:16:40
+  chunk_of_time: MyString
+  description: MyText
+  day_id: 1
+
+two:
+  name: MyString
+  start_time: 2011-02-28 02:16:40
+  end_time: 2011-02-28 02:16:40
+  chunk_of_time: MyString
+  description: MyText
+  day_id: 1

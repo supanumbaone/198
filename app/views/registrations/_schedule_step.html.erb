@@ -1,0 +1,14 @@
+<%= form_for @time_block do |f| %>
+	<h2>Last Step  >  When are you free?</h2>
+	<br /><br />
+	<% if true %>
+		<%= render "simple_schedule", :f => f %>
+	<% else %>
+		<%= render "complex_schedule", :f => f %>
+	<% end %>
+
+	<p><%= f.submit "Continue" %></p>
+	<p><%= f.submit "Back", :name => "back_button" %></p>
+	
+	<%= hidden_field_tag 'resource', @resource %>
+<% end %>

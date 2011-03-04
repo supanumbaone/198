@@ -1,0 +1,28 @@
+<%= form_for @group do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :description %><br />
+    <%= f.text_area :description %>
+  </p>
+  <p>
+    <%= f.label :invited_users %><br />
+    <%= f.text_area :invited_users %>
+  </p>
+  <p>
+    <%= f.label :max_members %><br />
+    <%= f.text_field :max_members %>
+  </p>
+  <p>
+    <%= f.label :total_members %><br />
+    <%= f.text_field :total_members %>
+  </p>
+  <p>
+    <%= f.label :privacy %><br />
+    <%= f.text_field :privacy %>
+  </p>
+  <p><%= f.submit %></p>
+<% end %>

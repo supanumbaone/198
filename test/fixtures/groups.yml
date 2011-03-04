@@ -1,0 +1,15 @@
+one:
+  name: MyString
+  description: MyText
+  invited_users: MyText
+  max_members: 1
+  total_members: 1
+  privacy: MyString
+
+two:
+  name: MyString
+  description: MyText
+  invited_users: MyText
+  max_members: 1
+  total_members: 1
+  privacy: MyString

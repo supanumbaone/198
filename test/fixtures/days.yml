@@ -1,0 +1,11 @@
+one:
+  name: MyString
+  date: 2011-02-28
+  description: MyText
+  schedule_id: 1
+
+two:
+  name: MyString
+  date: 2011-02-28
+  description: MyText
+  schedule_id: 1
