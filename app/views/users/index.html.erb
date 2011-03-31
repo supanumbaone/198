@@ -1,0 +1,30 @@
+<h1>Group Members (<%= @count %>)</h1>
+
+<div id="users_list">
+	<%= will_paginate @users %>
+	
+	<table>
+		<thead>
+			<tr>
+				<th>Avatar</th>
+				<th>Name</th>
+				<th>Join Date</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% if !@users.blank? %>
+			  <% for user in @users %>
+			  	<tr>
+					<td><%= image_tag(user.profile_image_url(:tiny)) %></td>
+					<td><%= link_to user.first_name, user %></td>
+					<td><%= user.created_at.strftime("%b %d, %Y") %></td>
+				</tr>
+			  <% end %>
+			<% else %>
+			   There are no users yet.
+			<% end %>
+		</tbody>
+	</table>
+	
+	<%= will_paginate @users %>
+</div>

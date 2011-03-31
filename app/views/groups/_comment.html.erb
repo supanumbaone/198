@@ -1,0 +1,49 @@
+<div id="comment_<%= comment.id %>" class="comments">
+	
+	<div class="comment">
+
+		<div id="group_info">
+			<div id="profile_image" class="floatLeft">
+				<%= image_tag(comment.user.profile_image_url(:tiny)) %>
+			</div>
+			<div id="user_name" class="floatLeft"><%= link_to comment.user.first_name, comment.user %> <span class="time"> at <% if (Time.now() - 1.day) > comment.created_at %>
+	              <%= comment.created_at.strftime("%D %r") %>
+	           <% else %>
+	               <%= comment.created_at.strftime("%r") %>
+	           <% end %></span>
+			</div>
+			
+			<div class="clear"></div>
+		</div>
+		<div class="comment_body"><%= comment.body %></div>
+		
+		<% if comment.is_root? %>
+			<%= link_to "Reply", "javascript:void(0)", :class => "comment_link" %>
+		<% end %>
+		
+		<div class="edit_comment">
+			<%= form_for(comment, :url => update_comment_path) do |f| %>
+			  <%= f.error_messages %>
+			  <%= hidden_field_tag :comment_id, comment.id %>
+			  <%= hidden_field_tag :group_id, @group.id %>
+			  <p><%= f.text_area :body, :rows => 4 %></p>
+			  <p><%= f.submit %></p>
+			<% end %>
+		</div>
+	
+		<div class="comment_form">
+			<%= form_for(@comment, :url => add_comment_path) do |f| %>
+			  <%= f.error_messages %>
+			  <%= hidden_field_tag :parent_id, comment.id %>
+			  <%= hidden_field_tag :group_id, @group.id %>
+			  <p><%= f.text_area :body, :rows => 4 %></p>
+			  <p><%= f.submit %></p>
+			<% end %>
+		</div>
+	</div>
+
+	<% if comment.has_children? %>
+		<%= indented_render 1, :partial => 'groups/comment', :collection => comment.children %>
+	<% end %>
+
+</div>

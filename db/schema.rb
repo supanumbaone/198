@@ -10,7 +10,25 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110228101640) do
+ActiveRecord::Schema.define(:version => 20110330215316) do
+
+  create_table "comments", :force => true do |t|
+    t.integer  "commentable_id",   :default => 0
+    t.string   "commentable_type", :default => ""
+    t.string   "title",            :default => ""
+    t.text     "body"
+    t.string   "subject",          :default => ""
+    t.integer  "user_id",          :default => 0,  :null => false
+    t.integer  "group_id",         :default => 0,  :null => false
+    t.integer  "parent_id"
+    t.integer  "lft"
+    t.integer  "rgt"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "comments", ["commentable_id"], :name => "index_comments_on_commentable_id"
+  add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
 
   create_table "days", :force => true do |t|
     t.string   "name"
@@ -28,6 +46,15 @@ ActiveRecord::Schema.define(:version => 20110228101640) do
     t.integer  "max_members"
     t.integer  "total_members"
     t.string   "privacy"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "creator"
+    t.string   "profile_image"
+  end
+
+  create_table "memberships", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "group_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -66,20 +93,24 @@ ActiveRecord::Schema.define(:version => 20110228101640) do
     t.integer  "day_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "recurring",     :default => false
   end
 
   create_table "users", :force => true do |t|
-    t.string   "email",                               :default => "",             :null => false
-    t.string   "encrypted_password",   :limit => 128, :default => "",             :null => false
-    t.string   "password_salt",                       :default => "",             :null => false
+    t.string   "email",                                     :default => "",             :null => false
+    t.string   "encrypted_password",         :limit => 128, :default => "",             :null => false
+    t.string   "password_salt",                             :default => "",             :null => false
     t.string   "reset_password_token"
     t.string   "remember_token"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                       :default => 0
+    t.integer  "sign_in_count",                             :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "first_name"
@@ -94,14 +125,20 @@ ActiveRecord::Schema.define(:version => 20110228101640) do
     t.string   "skype"
     t.string   "gtalk"
     t.string   "phone"
-    t.boolean  "hide_email",                          :default => true
-    t.boolean  "hide_phone",                          :default => true
-    t.boolean  "hide_ims",                            :default => true
-    t.string   "birthday_privacy",                    :default => "absolute"
-    t.string   "signup_status",                       :default => "account_step"
+    t.boolean  "hide_email",                                :default => true
+    t.boolean  "hide_phone",                                :default => true
+    t.boolean  "hide_ims",                                  :default => true
+    t.string   "birthday_privacy",                          :default => "absolute"
+    t.string   "signup_status",                             :default => "account_step"
     t.string   "profile_image"
+    t.boolean  "personal_information_added",                :default => false
+    t.integer  "discussion_section_1",                      :default => 0
+    t.integer  "discussion_section_2",                      :default => 0
+    t.integer  "discussion_section_3",                      :default => 0
+    t.string   "preferred_teammates"
   end
 
+  add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 

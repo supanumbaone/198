@@ -1,9 +1,9 @@
-<% title "Group" %>
+<% title "#{@group.name}" %>
 
-<p>
-  <strong>Name:</strong>
-  <%= @group.name %>
-</p>
+<p><%= image_tag(@group.profile_image_url(:thumb)) %></p>
+
+<p><%= link_to "Members", users_path(:group_id => @group) %></p>
+
 <p>
   <strong>Description:</strong>
   <%= @group.description %>
@@ -26,7 +26,32 @@
 </p>
 
 <p>
-  <%= link_to "Edit", edit_group_path(@group) %> |
-  <%= link_to "Destroy", @group, :confirm => 'Are you sure?', :method => :delete %> |
-  <%= link_to "View All", groups_path %>
+	<a href="javascript:void(0)" class="comment_link main_reply">Comment</a>
+</p>
+
+<div id="comment_form_0" class="comment_form_main">
+	<%= form_for(@comment, :url => add_comment_path) do |f| %>
+	  <%= f.error_messages %>
+	  <%= hidden_field_tag :parent_id, nil %>
+	  <%= hidden_field_tag :group_id, @group.id %>
+	  <p><%= f.text_area :body, :rows => 4 %></p>
+	  <p><%= f.submit %></p>
+	<% end %>
+</div>
+
+<p></p>
+<p>
+	<div id="comments">
+  		<%= render :partial => 'groups/comment', :collection => @root_comments %>
+	</div>
+</p>
+
+<p>
+  <% if current_user.id == @group.creator %>
+  	<%= link_to "Edit", edit_group_path(@group) %> |
+  	<%= link_to "Destroy", @group, :confirm => 'Are you sure?', :method => :delete %> |
+	<%= link_to "View All", groups_path %>
+  <% else %>
+	<%= link_to "View All", groups_path %>
+  <% end %>
 </p>

@@ -17,6 +17,8 @@ Grooopme::Application.configure do
 
   # If you have no front-end server that supports something like X-Sendfile,
   # just comment this out and Rails will serve the files
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.default_url_options = { :host => 'inforum.boltlab.com' }
 
   # See everything in the log (default is :info)
   # config.log_level = :debug

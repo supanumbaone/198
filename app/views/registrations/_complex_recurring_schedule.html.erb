@@ -1,0 +1,17 @@
+<%= f.error_messages %>
+<table>
+	<tr class="column-headers">
+		<% @daynames.each do |day| %>
+			<th><%= day %></th>
+		<% end %>
+ 	</tr>
+	<% @times.each do |time| %>
+		<tr>
+			<% @daynames.each do |day| %>
+				<td><%= time %> <%= f.check_box :chunk_of_time, {:multiple => true}, "#{day}_#{time}", nil %></td>
+			<% end %>
+		</tr>
+	<% end %>
+</table>
+
+<%= hidden_field_tag 'schedule_type', 'complex_recurring' %>

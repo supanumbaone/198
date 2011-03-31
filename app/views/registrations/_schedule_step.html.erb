@@ -1,10 +1,12 @@
 <%= form_for @time_block do |f| %>
 	<h2>Last Step  >  When are you free?</h2>
 	<br /><br />
-	<% if true %>
+	<% if false %>
+		<%= render "complex_recurring_schedule", :f => f %>
+	<% elsif false %>
 		<%= render "simple_schedule", :f => f %>
 	<% else %>
-		<%= render "complex_schedule", :f => f %>
+		<%= render "conventional_simple_schedule", :f => f %>
 	<% end %>
 
 	<p><%= f.submit "Continue" %></p>

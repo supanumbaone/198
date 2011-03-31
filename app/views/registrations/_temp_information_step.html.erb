@@ -1,0 +1,44 @@
+<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put, :multipart => true }) do |f| %>
+	<h2>Step 2  >  A bit about You</h2>
+	<br /><br />
+	<%= f.error_messages %>
+	<p>
+		<%= f.label :first_name %><br />
+	  	<%= f.text_field :first_name %>
+	</p>
+	<p>
+		<%= f.label :last_name %><br />
+	  	<%= f.text_field :last_name %>
+	</p>
+	<br />
+	<p>
+		Please answer the following questions based on your preference on the time that you plan to attend CSE 110 Monday discussion section.  The choices of time are on Mondays 2pm-2:50pm, 3pm-3:50pm or 4pm-4:50pm.  Please enter 1 to indicate your first choice, 2 for your second choice, 3 for your third choice, or 0 if you can't attend at that time.  If you have no preference among your first and second choice, please enter 2 for both of them.  If you have no preference among your second and third choice, please enter 3 for both of them.  If you have no preference among all your choices, please enter 3 for all of them.<br /><br />
+	  	<tr>
+			<td>What is your attendance preference for Monday from 2pm-2:50pm?<br />
+			Please enter 1 for first choice, 2 for second choice, 3 for third choice, or 0 for not available.</td><br />
+			<td><%= f.select :discussion_section_1, {"1" => 1, "2" => 2, "3" => 3, "0" => 0} %></td>
+		</tr>
+		<br /><br />
+		<tr>
+			<td>What is your attendance preference for Monday from 3pm-3:50pm?<br />
+			Please enter 1 for first choice, 2 for second choice, 3 for third choice, or 0 for not available.</td><br />
+			<td><%= f.select :discussion_section_2, {"1" => 1, "2" => 2, "3" => 3, "0" => 0} %></td>
+		</tr>
+		<br /><br />
+		<tr>
+			<td>What is your attendance preference for Monday from 4pm-4:50pm?<br />
+			Please enter 1 for first choice, 2 for second choice, 3 for third choice, or 0 for not available.</td><br />
+			<td><%= f.select :discussion_section_3, {"1" => 1, "2" => 2, "3" => 3, "0" => 0} %></td>
+		</tr>
+	</p>
+	<br />
+	<p>
+		<%= f.label "(Optional) Enter in the ucsd.edu email addresses of CSE 110 students you prefer to be grouped with. If more than one, separate the email addresses with commas." %><br />
+	  	<%= f.text_field :preferred_teammates %>
+	</p>
+
+	<p><%= f.submit "Continue" %></p>
+	<p><%= f.submit "Back", :name => "back_button" %></p>
+	
+	<%= hidden_field_tag 'step', '2' %>
+<% end %>

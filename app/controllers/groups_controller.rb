@@ -1,10 +1,15 @@
 class GroupsController < ApplicationController
+  before_filter :authenticate_user!
+  
   def index
     @groups = Group.all
   end
 
   def show
     @group = Group.find(params[:id])
+    @comment = Comment.new
+    @root_comments = @group.root_comments
+    @all_comments = @group.comment_threads
   end
 
   def new
@@ -13,8 +18,16 @@ class GroupsController < ApplicationController
 
   def create
     @group = Group.new(params[:group])
+    @group.creator = current_user.id
+    @group.total_members = 1
     if @group.save
-      redirect_to @group, :notice => "Successfully created group."
+      @membership = Membership.new(:group_id => @group.id, :user_id => current_user.id)
+      if @membership.save
+        redirect_to @group, :notice => "Successfully created group."
+      else
+        flash[:error] = "We were not able to create your membership with this group, please try again :/"
+        render :action => 'new'
+      end
     else
       render :action => 'new'
     end

@@ -1,0 +1,45 @@
+<%= f.error_messages %>
+<table>
+	<tr class="column-headers">
+		<th>Days</th>
+		<th>Monday</th>
+	   	<th>Tuesday</th>
+	   	<th>Wednesday</th>
+		<th>Thursday</th>
+		<th>Friday</th>
+		<th>Saturday</th>
+		<th>Sunday</th>
+ 	</tr>
+    <tr id="morning">
+		<td>Morning</td>
+	  	<td><%= f.check_box :chunk_of_time, {:multiple => true}, "Monday_morning", nil %></td>
+     	<td><%= f.check_box :chunk_of_time, {:multiple => true}, "Tuesday_morning", nil %></td>
+		<td><%= f.check_box :chunk_of_time, {:multiple => true}, "Wednesday_morning", nil %></td>
+		<td><%= f.check_box :chunk_of_time, {:multiple => true}, "Thursday_morning", nil %></td>
+		<td><%= f.check_box :chunk_of_time, {:multiple => true}, "Friday_morning", nil %></td>
+		<td><%= f.check_box :chunk_of_time, {:multiple => true}, "Saturday_morning", nil %></td>
+		<td><%= f.check_box :chunk_of_time, {:multiple => true}, "Sunday_morning", nil %></td>
+    </tr>
+	<tr id="afternoon">
+		<td>Afternoon</td>
+	  	<td><%= f.check_box :chunk_of_time, {:multiple => true}, "Monday_afternoon", nil %></td>
+     	<td><%= f.check_box :chunk_of_time, {:multiple => true}, "Tuesday_afternoon", nil %></td>
+		<td><%= f.check_box :chunk_of_time, {:multiple => true}, "Wednesday_afternoon", nil %></td>
+		<td><%= f.check_box :chunk_of_time, {:multiple => true}, "Thursday_afternoon", nil %></td>
+		<td><%= f.check_box :chunk_of_time, {:multiple => true}, "Friday_afternoon", nil %></td>
+		<td><%= f.check_box :chunk_of_time, {:multiple => true}, "Saturday_afternoon", nil %></td>
+		<td><%= f.check_box :chunk_of_time, {:multiple => true}, "Sunday_afternoon", nil %></td>
+    </tr>
+	<tr id="evening">
+		<td>Evening</td>
+	  	<td><%= f.check_box :chunk_of_time, {:multiple => true}, "Monday_evening", nil %></td>
+     	<td><%= f.check_box :chunk_of_time, {:multiple => true}, "Tuesday_evening", nil %></td>
+		<td><%= f.check_box :chunk_of_time, {:multiple => true}, "Wednesday_evening", nil %></td>
+		<td><%= f.check_box :chunk_of_time, {:multiple => true}, "Thursday_evening", nil %></td>
+		<td><%= f.check_box :chunk_of_time, {:multiple => true}, "Friday_evening", nil %></td>
+		<td><%= f.check_box :chunk_of_time, {:multiple => true}, "Saturday_evening", nil %></td>
+		<td><%= f.check_box :chunk_of_time, {:multiple => true}, "Sunday_evening", nil %></td>
+    </tr>
+</table>
+
+<%= hidden_field_tag 'schedule_type', 'conventional_simple' %>

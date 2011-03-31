@@ -74,6 +74,18 @@ a {
   margin: 0;
 }
 
+/* The dividing line */
+
 tr .day_chunk {
 	height: 300px;
 }
+
+.login {
+	margin-left: 15px;
+	float: right;
+}
+
+.comment_form { display: none; }
+.comments { margin-left: 50px; }
+.edit_comment, #about_info, #change_pass { display: none; }
+.comment_form_main { display: none; }

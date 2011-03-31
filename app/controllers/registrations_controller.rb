@@ -29,10 +29,10 @@ class RegistrationsController < Devise::RegistrationsController
       
       # Updates teh user
       if resource.update_with_password(params[resource_name])
-        set_flash_message :notice, :updated
         if @step == '2'
-          redirect_to signup_wizard_path(:step => '3', :resource => resource)
+          redirect_to signup_wizard_path(:step => '3', :resource => resource), :notice => "Now that we've confirmed a bit of information, what times are you free?"
         else
+          set_flash_message :notice, :updated
           redirect_to after_update_path_for(resource)
         end
       else
@@ -59,5 +59,6 @@ class RegistrationsController < Devise::RegistrationsController
     @daynames = %w(Sunday Monday Tuesday Wednesday Thursday Friday Saturday)
     @time_block = TimeBlock.new
     @today = Date.today
+    @times = TimeBlock.get_time_list
   end
 end
