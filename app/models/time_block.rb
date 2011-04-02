@@ -25,6 +25,7 @@ class TimeBlock < ActiveRecord::Base
     !time_block.empty?
   end
   
+  # Generates a list of times to be used in _complex_recurring_schedule.html.erb
   def self.get_time_list
     times = []
     i = 7

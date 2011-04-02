@@ -6,6 +6,77 @@
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Mayor.create(:name => 'Daley', :city => cities.first)
 
+=begin
+emails = []
+i = 0
+while i < 150
+  emails << "#{i}@ucsd.edu"
+  i += 1
+end
+
+i = 0
+while i < 150
+  r1 = rand(2)
+  r2 = rand(2)
+  if r1 == 0 && r2 == 0
+    r3 = 1
+  else
+    r3 = rand(2)
+  end
+  
+  number_of_preferred_teammates = rand(10)
+  preferred_teammates = ""
+  i = 0 
+  while i < number_of_preferred_teammates
+    teammate = rand(150)
+    chosen_teammates = []
+    if !chosen(chosen_teammates, teammate)
+      chosen_teammates << teammate
+      i += 1
+    end
+  end
+  
+  user = User.create(
+    :email => emails[i],
+    :password => "666666",
+    :password_confirmation => "666666",
+    :discussion_section_1 => r1,
+    :discussion_section_2 => r2,
+    :discussion_section_3 => r3,
+    :preferred_teammates => "jsnyder@ucsd.edu, dabaraja@ucsd.edu, cnmorse@ucsd.edu, mjjones@ucsd.edu"
+  )
+  schedule = Schedule.create(
+    :user_id => user.id
+  )
+  days = Day.create(
+    [ {:name => "Wednesday", :schedule_id => schedule.id},
+      {:name => "Friday", :schedule_id => schedule.id},
+      {:name => "Saturday", :schedule_id => schedule.id},
+      {:name => "Sunday", :schedule_id => schedule.id} ]
+  )
+  TimeBlock.create(
+    [ {:chunk_of_time => "afternoon", :day_id => days[0].id},
+      {:chunk_of_time => "evening", :day_id => days[0].id},
+      {:chunk_of_time => "evening", :day_id => days[1].id},
+      {:chunk_of_time => "morning", :day_id => days[2].id},
+      {:chunk_of_time => "afternoon", :day_id => days[2].id},
+      {:chunk_of_time => "evening", :day_id => days[2].id},
+      {:chunk_of_time => "morning", :day_id => days[3].id},
+      {:chunk_of_time => "afternoon", :day_id => days[3].id},
+      {:chunk_of_time => "evening", :day_id => days[3].id} ]
+  )
+end
+
+def self.chosen(nums, current)
+  i = 0
+  while i < nums.size
+    return true if nums[i] == current
+  end
+  
+  return false
+end
+=end
+
 #  Brenton Bahry
 user = User.create(
   :email => "bbahry@ucsd.edu",
