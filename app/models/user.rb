@@ -164,4 +164,25 @@ class User < ActiveRecord::Base
       return 2
     end
   end
+  
+  require 'csv'
+  def self.import_user_groupings
+    file_name = "users.csv"
+    import_path = "#{Rails.root}/public/imports/" + file_name
+    users = User.all
+    
+    CSV.foreach(import_path) do |row|
+      users.each do |user|
+        if user.email == row[0]
+          group = Group.where(:name => row[1]).first
+          if !group
+            group = Group.new(:name => row[1])
+            group.save
+          end
+          membership = Membership.new(:group_id => group.id, :user_id => user.id)
+          membership.save
+        end
+      end
+    end
+  end
 end
