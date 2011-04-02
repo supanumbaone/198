@@ -6,6 +6,7 @@ class RegistrationsController < Devise::RegistrationsController
   
   # PUT /resource
   def update
+    # The step of the wizzard to be rendered next
     @step = params['step']
     
     # Handles the back button in signup_wizard

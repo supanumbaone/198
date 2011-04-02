@@ -157,11 +157,11 @@ class User < ActiveRecord::Base
   
   def self.numeric_block(block)
     if block == "morning"
-      return 1
+      return 0
     elsif block == "afternoon"
-      return 2
+      return 1
     elsif block == "evening"
-      return 3
+      return 2
     end
   end
 end
