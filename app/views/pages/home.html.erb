@@ -16,4 +16,7 @@
 	<h1>HOME PAGE</h1>
 	<br /><br />
 	User is not signed in..
+	<br /><br />
+	<%= link_to "download users", download_path(:export_type => "user") %>
+	<%= link_to "download schedule", download_path(:export_type => "schedule") %>
 <% end %>

@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable, :lockable and :timeoutable
-  devise :database_authenticatable, :registerable, :confirmable,
+  devise :database_authenticatable, :registerable, #:confirmable,
          :recoverable, :rememberable, :trackable, :validatable
   
   # Alias for <tt>acts_as_taggable_on :tags</tt>: <tt>acts_as_taggable</tt>  
@@ -114,6 +114,54 @@ class User < ActiveRecord::Base
         time_block = TimeBlock.new(:start_time => start_time, :end_time => end_time, :day_id => day.id, :recurring => recurring)
         time_block.save
       end
+    end
+  end
+  
+  def self.export_object
+    users = User.all
+    users_to_be_exported = []
+    
+    users.each do |user|
+      temp = "#{user.email},#{user.discussion_section_1},#{user.discussion_section_2},#{user.discussion_section_3}:#{user.preferred_teammates}:".gsub(/\s/,"")
+      if user.schedule
+        user.schedule.days.each do |day|
+          day.time_blocks.each do |block|
+            temp += "#{numeric_day(day.name)} #{numeric_block(block.chunk_of_time)},"
+          end
+        end
+      end
+      temp = temp[0..(temp.length-2)] if temp[temp.length-1] == ","
+      users_to_be_exported << temp
+    end
+    
+    users_to_be_exported
+  end
+  
+  def self.numeric_day(day)
+    if day == "Monday"
+      return 0
+    elsif day == "Tuesday"
+      return 1
+    elsif day == "Wednesday"
+      return 2
+    elsif day == "Thursday"
+      return 3
+    elsif day == "Friday"
+      return 4
+    elsif day == "Saturday"
+      return 5
+    elsif day == "Sunday"
+      return 6
+    end
+  end
+  
+  def self.numeric_block(block)
+    if block == "morning"
+      return 1
+    elsif block == "afternoon"
+      return 2
+    elsif block == "evening"
+      return 3
     end
   end
 end
