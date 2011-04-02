@@ -6,5 +6,5 @@
 	<% end %>
 <% else %>
 	<%= link_to "Home", root_url %>
-	<div class="login"><%= link_to "Login/Signup", new_user_session_path %></div>
+	<div class="user_bar"><%= link_to "Login", new_user_session_path %> or <%= link_to "Sign Up", new_user_registration_path %></div>
 <% end %>
