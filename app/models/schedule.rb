@@ -22,7 +22,9 @@ class Schedule < ActiveRecord::Base
     end
     
     schedule.each do |block|
-      schedule_to_be_exported << block
+      block.each do |mini|
+        schedule_to_be_exported << mini[0..(mini.size-2)]
+      end
     end
     
     schedule_to_be_exported
