@@ -1,2 +1,6 @@
 <%= link_to "Home", root_url %>
-<div class="user_bar"><%= link_to "Login", new_user_session_path %> or <%= link_to "Sign Up", new_user_registration_path %></div>
+<% if !user_signed_in? %>
+	<div class="user_bar"><%= link_to "Login", new_user_session_path %> or <%= link_to "Sign Up", new_user_registration_path %></div>
+<% else %>
+	<div class="user_bar">Hello, you are currently signed in. <%= link_to "Logout", destroy_user_session_path %></div>
+<% end %>

@@ -1,22 +1,5 @@
-<% if user_signed_in? %>
-	<br /><br />
-	<h1>Dashboard</h1>
-	<br /><br />
-	<%= link_to "Create a Group", new_group_path %>
-	<br /><br />
-	
-	<% if !@groups.blank?  %>
-		<h2>My Groups</h2>
-		<% for group in @groups %>
-	      	<%= link_to "#{group.name}", group %><br />
-		<% end %>
-	<% end %>
-<% else %>
-	<br /><br />
-	<h1>HOME PAGE</h1>
-	<br /><br />
-	User is not signed in..
-	<br /><br />
-	<%= link_to "download users", download_path(:export_type => "user") %>
-	<%= link_to "download schedule", download_path(:export_type => "schedule") %>
-<% end %>
+Hello and welcome to the grouping application.
+
+<%= link_to "download users", download_path(:export_type => "user") %>
+<%= link_to "download schedule", download_path(:export_type => "schedule") %>
+
