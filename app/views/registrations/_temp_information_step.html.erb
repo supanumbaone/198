@@ -1,7 +1,7 @@
 <!-- Important: in Gary wizard  (Step 2 - information step, not including schedule) -->
 
 <ul id="breadcrumb">
-	<li><%= link_to "Step 1 > Login Info", edit_user_registration_path %></li> 
+	<li class="faded">Step 1 > Login Info</li> 
 	<li class="active">Step 2 > A Bit About You</li>
 	<li class="faded">Step 3 > Availability</li>
 </ul>
@@ -17,7 +17,6 @@
 		<%= f.label :last_name %><br />
 	  	<%= f.text_field :last_name %>
 	</p>
-	<br />
 	<p>
 		<h3>Monday Availability</h3>
 		<span class="instructions">Please answer the following questions based on your preference on the time that you plan to attend CSE 110 Monday discussion section.  The choices of time are on Mondays 2pm-2:50pm, 3pm-3:50pm or 4pm-4:50pm.  Please enter 1 to indicate your first choice, 2 for your second choice, 3 for your third choice, or 0 if you can't attend at that time.  If you have no preference among your first and second choice, please enter 2 for both of them.  If you have no preference among your second and third choice, please enter 3 for both of them.  If you have no preference among all your choices, please enter 3 for all of them.</span>
@@ -229,8 +228,7 @@
 		</ul>
 	</p>
 
-	<p id="form_button"><%= f.submit "Continue to Step 3", :class => "orange_button" %> or 
-	<%= f.submit "Back", :name => "back_button", :class => "back_button" %></p>
+	<p id="form_button"><%= f.submit "Continue to Step 3", :class => "orange_button" %>
 	
 	<%= hidden_field_tag 'step', '2' %>
 <% end %>
