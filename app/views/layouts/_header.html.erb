@@ -1,10 +1,2 @@
-<% if user_signed_in? %>
-	<% if current_user.signup_status == "completed" %>
-		<%= link_to "Home", root_url %>
-		<div class="login"><%= link_to "Logout", destroy_user_session_path %></div>
-		<div class="login">Hey, <%= current_user.first_name %></div>
-	<% end %>
-<% else %>
-	<%= link_to "Home", root_url %>
-	<div class="login"><%= link_to "Login/Signup", new_user_session_path %></div>
-<% end %>
+<%= link_to "Home", root_url %>
+<div class="user_bar"><%= link_to "Login", new_user_session_path %> or <%= link_to "Sign Up", new_user_registration_path %></div>

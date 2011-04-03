@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable, :lockable and :timeoutable
-  devise :database_authenticatable, :registerable, #:confirmable,
+  devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable
   
   # Alias for <tt>acts_as_taggable_on :tags</tt>: <tt>acts_as_taggable</tt>  
@@ -36,7 +36,7 @@ class User < ActiveRecord::Base
   # validates_size_of :profile_image, :maximum => 5.megabytes, :if => lambda { |user| user.current_step == 'information_step' }
   
   # Check out app/validators/email_format_validator.rb
-  validates :email, :email_format => true
+  #validates :email, :email_format => true
   
   # Overwriting Devise's update_with_password
   def update_with_password(params={})

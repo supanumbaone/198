@@ -1,7 +1,8 @@
 <!-- Step 2 for gathering a user's personal information -->
 
+<h2>Step 2  >  A bit about You</h2>
+
 <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put, :multipart => true }) do |f| %>
-	<h2>Step 2  >  A bit about You</h2>
 	<br /><br />
 	<%= f.error_messages %>
 	<p>
