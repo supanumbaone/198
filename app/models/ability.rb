@@ -5,9 +5,21 @@ class Ability
     user ||= User.new  # guest user
   
     if !user.email.blank?
-      can :signup_wizard, @registration
-      can :edit, @registration
+      can :read, @registration
       can :update, @registration
+      can :signup_wizard, @registration
+          
+      can :create, Membership
+      can :update, Membership
+      
+      can :create, Schedule
+      can :update, Schedule
+      
+      can :create, Day
+      can :update, Day
+      
+      can :create, TimeBlock
+      can :update, TimeBlock
     else
       can :create, @registration
     end
