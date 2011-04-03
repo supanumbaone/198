@@ -30,6 +30,8 @@ $(document).ready(function() {
 	
 	$(function() {
 			var availableNames = [
+				"Tarin Arora <tarora@ucsd.edu>",
+				"Al Colmenar <acolmena@ucsd.edu",
 				"Elioth Artur Almada <ealmada@ucsd.edu>",
 				"Hyeong Mi An <hman@ucsd.edu>",
 				"Radley Edwi Angelo <rangelo@ucsd.edu>",
