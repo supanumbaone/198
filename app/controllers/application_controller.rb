@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  before_filter :authenticate_user!
+  # before_filter :authenticate_user!
   # check_authorization
   protect_from_forgery
   before_filter :mailer_set_url_options
