@@ -1,4 +1,4 @@
-<% if resource.signup_status == 'completed' %>
+<!-- Not in use right now. Back button replaces functionality -->
 	<h2>Edit <%= resource_name.to_s.humanize %></h2>
 	
 	<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
@@ -7,13 +7,13 @@
 	  <p><%= f.label :email %><br />
 	  <%= f.text_field :email %></p>
 
-	  <p><%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
+	  <p><%= f.label :password %> <i>(leave blank if you don't want to change it)</i>
 	  <%= f.password_field :password %></p>
 
-	  <p><%= f.label :password_confirmation %><br />
+	  <p><%= f.label :password_confirmation %>
 	  <%= f.password_field :password_confirmation %></p>
 
-	  <p><%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
+	  <p><%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i>
 	  <%= f.password_field :current_password %></p>
 
 	  <p><%= f.submit "Update" %></p>
@@ -24,23 +24,3 @@
 	<p>Unhappy? <%= link_to "Cancel my account", registration_path(resource_name), :confirm => "Are you sure?", :method => :delete %>.</p>
 
 	<%= link_to "Back", :back %>
-<% else %>
-	<h2>Step 1  >  Login Info</h2>
-	
-	<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
-	  <%= f.error_messages %>
-
-	  <p><%= f.label :email %><br />
-	  <%= f.text_field :email %></p>
-
-	  <p><%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-	  <%= f.password_field :password %></p>
-
-	  <p><%= f.label :password_confirmation %><br />
-	  <%= f.password_field :password_confirmation %></p>
-
-	  <p><%= f.submit "Continue" %></p>
-	<% end %>
-	
-	<%= hidden_field_tag 'step', '1' %>
-<% end %>

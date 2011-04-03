@@ -1,8 +1,9 @@
 <!-- Important: in Gary wizard  (Step 2 - information step, not including schedule) -->
 
+<h2>Step 2  >  A bit about You</h2>
+
 <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put, :multipart => true }) do |f| %>
-	<h2>Step 2  >  A bit about You</h2>
-	<br /><br />
+
 	<%= f.error_messages %>
 	<p>
 		<%= f.label :first_name %><br />
@@ -14,7 +15,7 @@
 	</p>
 	<br />
 	<p>
-		Please answer the following questions based on your preference on the time that you plan to attend CSE 110 Monday discussion section.  The choices of time are on Mondays 2pm-2:50pm, 3pm-3:50pm or 4pm-4:50pm.  Please enter 1 to indicate your first choice, 2 for your second choice, 3 for your third choice, or 0 if you can't attend at that time.  If you have no preference among your first and second choice, please enter 2 for both of them.  If you have no preference among your second and third choice, please enter 3 for both of them.  If you have no preference among all your choices, please enter 3 for all of them.<br /><br />
+		Please answer the following questions based on your preference on the time that you plan to attend CSE 110 Monday discussion section.  The choices of time are on Mondays 2pm-2:50pm, 3pm-3:50pm or 4pm-4:50pm.  Please enter 1 to indicate your first choice, 2 for your second choice, 3 for your third choice, or 0 if you can't attend at that time.  If you have no preference among your first and second choice, please enter 2 for both of them.  If you have no preference among your second and third choice, please enter 3 for both of them.  If you have no preference among all your choices, please enter 3 for all of them.
 	  	<tr>
 			<td>What is your attendance preference for Monday from 2pm-2:50pm?<br />
 			Please enter 1 for first choice, 2 for second choice, 3 for third choice, or 0 for not available.</td><br />

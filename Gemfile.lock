@@ -120,6 +120,7 @@ GEM
     riddle (1.2.2)
     rmagick (2.13.1)
     thor (0.14.6)
+    tlsmail (0.0.1)
     treetop (1.4.9)
       polyglot (>= 0.3.1)
     tzinfo (0.3.25)
@@ -146,4 +147,5 @@ DEPENDENCIES
   rails (= 3.0.5)
   rmagick
   thinking-sphinx!
+  tlsmail
   will_paginate
