@@ -9,7 +9,7 @@ class Ability
       # can :home, Page
       # can :update, Registration
       can :signup_wizard, @registration
-      
+      can :update, @registration
       # can :create, TimeBlock
       # can :update, TimeBlock
       # can :create, Session

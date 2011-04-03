@@ -1,11 +1,3 @@
-
-<div id="navigation">
-	<% if !user_signed_in? %>
-	<% else %>
-		<div class="user_bar">Hello, you are currently signed in. <%= link_to "Logout", destroy_user_session_path %></div>
-	<% end %>
-</div>
-
 <div id="logo">
 	<h1><%= link_to "UCSD Student Grouper", root_url %></h1>
 </div>

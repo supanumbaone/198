@@ -1,5 +1,9 @@
 <!-- Not in use right now. Back button replaces functionality -->
-	<h2>Edit <%= resource_name.to_s.humanize %></h2>
+	<ul id="breadcrumb">
+		<li class="active">Step 1 > Login Info</li> 
+		<li class="faded">Step 2 > A Bit About You</li>
+		<li class="faded">Step 3 > Availability</li>
+	</ul>
 	
 	<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
 	  <%= f.error_messages %>
@@ -7,16 +11,14 @@
 	  <p><%= f.label :email %><br />
 	  <%= f.text_field :email %></p>
 
-	  <p><%= f.label :password %> <i>(leave blank if you don't want to change it)</i>
+	  <p><%= f.label :password %> <span class="info">Leave blank if you don't want to change it.</span>
 	  <%= f.password_field :password %></p>
 
-	  <p><%= f.label :password_confirmation %>
+	  <p><%= f.label :password_confirmation %><br />
 	  <%= f.password_field :password_confirmation %></p>
 
-	  <p><%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i>
+	  <p><%= f.label :current_password %> <span class="info">(we need your current password to confirm your changes.</span>
 	  <%= f.password_field :current_password %></p>
 
-	  <p><%= f.submit "Update" %></p>
+	  <p id="form_button"><%= f.submit "Update", :class => "orange_button" %></p>
 	<% end %>
-	
-	<%= link_to "Back", :back %>

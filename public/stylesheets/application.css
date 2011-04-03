@@ -250,3 +250,11 @@ table td { font-size: 13px; }
 th, td { padding: 5px 5px; }
 .column-headers { font-size: 12px; }
 .column-headers th { font-weight: bold; }
+#breadcrumb { margin-bottom: 40px; }
+#breadcrumb li {
+  margin-right: 15px;
+  display: inline;
+  font-size: 18px;
+}
+#breadcrumb .active { font-size: 21px; }
+#breadcrumb .faded { color: #c8c8c8; }

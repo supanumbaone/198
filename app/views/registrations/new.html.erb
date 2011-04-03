@@ -1,6 +1,9 @@
 <!-- IMPORTANT: Step 1 of Form -->
-
-<h2>Step 1 > Login Info</h2>
+<ul id="breadcrumb">
+	<li class="active">Step 1 > Login Info</li> 
+	<li class="faded">Step 2 > A Bit About You</li>
+	<li class="faded">Step 3 > Availability</li>
+</ul>
 
 <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
   <%= f.error_messages %>
