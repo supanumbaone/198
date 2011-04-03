@@ -15,6 +15,7 @@ class Ability
       # can :create, Session
       # can :destroy, Session
     else
+      can :home, @page
       can :create, @registration
       # can :read, @registration
       # can :update, @registration

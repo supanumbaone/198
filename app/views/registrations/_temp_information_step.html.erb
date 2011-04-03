@@ -47,7 +47,7 @@
 			</div>
 			
 			<div class="floatRight">
-				<select>
+				<select class="team_select">
 					<option selected="selected">Choose A Friend</option>
 					<option>------------</option>
 					<option class="dd_trigger" value="Aria Andre Arasteh <aarasteh@ucsd.edu>">Aria Andre Arasteh</option>
@@ -188,35 +188,39 @@
 		<ul id="programming_languages">
 			<li>
 				<%= f.label :html, "HTML" %>
-				<%= f.select :html, options_for_select([10,9,8,7,6,5,4,3,2,1,0]) %>
+				<%= f.select :html, options_for_select([10,9,8,7,6,5,4,3,2,1,0], :selected => 5) %>
 			</li>
 			<li>
 				<%= f.label :css, "CSS" %>
-				<%= f.select :css, options_for_select([10,9,8,7,6,5,4,3,2,1,0]) %>
+				<%= f.select :css, options_for_select([10,9,8,7,6,5,4,3,2,1,0], :selected => 5) %>
 			</li>
 			<li>
 				<%= f.label :javascript, "Javascript" %>
-				<%= f.select :javascript, options_for_select([10,9,8,7,6,5,4,3,2,1,0]) %>
+				<%= f.select :javascript, options_for_select([10,9,8,7,6,5,4,3,2,1,0], :selected => 5) %>
 			</li>
 			<li>
 				<%= f.label :java, "Java" %>
-				<%= f.select :java, options_for_select([10,9,8,7,6,5,4,3,2,1,0]) %>
+				<%= f.select :java, options_for_select([10,9,8,7,6,5,4,3,2,1,0], :selected => 5) %>
 			</li>
 			<li>
 				<%= f.label :cpp, "C/C++" %>
-				<%= f.select :cpp, options_for_select([10,9,8,7,6,5,4,3,2,1,0]) %>
+				<%= f.select :cpp, options_for_select([10,9,8,7,6,5,4,3,2,1,0], :selected => 5) %>
 			</li>
 			<li>
 				<%= f.label :python, "Python" %>
-				<%= f.select :python, options_for_select([10,9,8,7,6,5,4,3,2,1,0]) %>
+				<%= f.select :python, options_for_select([10,9,8,7,6,5,4,3,2,1,0], :selected => 5) %>
 			</li>
 			<li>
 				<%= f.label :ruby_ror, "Ruby/Ruby on Rails" %>
-				<%= f.select :ruby_ror, options_for_select([10,9,8,7,6,5,4,3,2,1,0]) %>
+				<%= f.select :ruby_ror, options_for_select([10,9,8,7,6,5,4,3,2,1,0], :selected => 5) %>
 			</li>
 			<li>
 				<%= f.label :sql, "SQL (MySQL, Postgres, etc.)" %>
-				<%= f.select :sql, options_for_select([10,9,8,7,6,5,4,3,2,1,0]) %>
+				<%= f.select :sql, options_for_select([10,9,8,7,6,5,4,3,2,1,0], :selected => 5) %>
+			</li>
+			<li>
+				<%= f.label :other, "Any Other Languages?" %>
+				<%= f.text_field :other %>
 			</li>
 		</ul>
 	</p>

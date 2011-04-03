@@ -247,3 +247,6 @@ table td { font-size: 13px; }
 .floatLeft { float: left; }
 .floatRight { float: right; }
 .clear { clear: both; }
+th, td { padding: 5px 5px; }
+.column-headers { font-size: 12px; }
+.column-headers th { font-weight: bold; }
