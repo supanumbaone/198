@@ -1,4 +1,5 @@
 class PagesController < ApplicationController
+  before_filter :finished_signup
   
   def home
     @user = current_user
@@ -8,5 +9,12 @@ class PagesController < ApplicationController
   end
   
   def signed_up
+  end
+  
+  def finished_signup
+    if current_user && current_user.signup_status != 'completed' && current_user.confirmed_at
+      redirect_to signup_wizard_path(:step => '2', :resource => current_user)
+      false
+    end
   end
 end

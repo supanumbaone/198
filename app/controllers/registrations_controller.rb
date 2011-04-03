@@ -1,8 +1,7 @@
 # Overriding Devise's registrations_controller
 class RegistrationsController < Devise::RegistrationsController
-  
   #Only authenticate users, if the admin user is present
-  # before_filter :authenticate_user!, :only => [:new]
+  # before_filter :authenticate_user!
   
   # PUT /resource
   def update
@@ -48,7 +47,9 @@ class RegistrationsController < Devise::RegistrationsController
   end
   
   def signup_wizard
-    @resource = params[:resource]
+    authorize! :signup_wizard, @registration
+    
+    @resource = current_user
     
     # needed to populate form fields if data already exists
     # 
