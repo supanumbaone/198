@@ -1,5 +1,17 @@
-Hello and welcome to the grouping application.
+<div id="introduction">
+	<p>Hello and welcome to the student grouper. We will be using the following information to put you the best suitable groups. Please fill it out honestly and with accuracy. This form should take you less than 5 minutes and it consists of 3 simple steps.</p>
 
-<%= link_to "download users", download_path(:export_type => "user") %>
-<%= link_to "download schedule", download_path(:export_type => "schedule") %>
+	<ul>
+		<h3>Form Steps</h3>
+		<li>Verify Your UCSD Email</li>
+		<li>Get Some General Information (Coding Skills and Friends You Like)</li>
+		<li>Get Your Availability Times</li>
+	</ul>
 
+	<%= link_to "Get Started", new_user_registration_path, :class => "orange_button" %>
+</div>
+
+<div style="display:none">
+	<%= link_to "download users", download_path(:export_type => "user") %>
+	<%= link_to "download schedule", download_path(:export_type => "schedule") %>
+</div>

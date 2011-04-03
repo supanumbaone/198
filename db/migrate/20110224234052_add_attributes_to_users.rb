@@ -12,9 +12,28 @@ class AddAttributesToUsers < ActiveRecord::Migration
     add_column :users, :skype, :string
     add_column :users, :gtalk, :string
     add_column :users, :phone, :string
+    add_column :users, :html, :integer
+    add_column :users, :css, :integer
+    add_column :users, :javascript, :integer
+    add_column :users, :java, :integer
+    add_column :users, :python, :integer
+    add_column :users, :ruby_ror, :integer
+    add_column :users, :sql, :integer
+    add_column :users, :cpp, :integer
+    add_column :users, :other, :string
   end
 
   def self.down
+    remove_column :other, :other
+    remove_column :table_name, :column_name
+    remove_column :users, :cpp
+    remove_column :users, :sql
+    remove_column :users, :ruby_ror
+    remove_column :users, :python
+    remove_column :users, :java
+    remove_column :users, :javascript
+    remove_column :users, :css
+    remove_column :users, :html
     remove_column :users, :phone
     remove_column :users, :gtalk
     remove_column :users, :skype

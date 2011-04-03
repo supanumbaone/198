@@ -125,6 +125,15 @@ ActiveRecord::Schema.define(:version => 20110330215316) do
     t.string   "skype"
     t.string   "gtalk"
     t.string   "phone"
+    t.integer  "html"
+    t.integer  "css"
+    t.integer  "javascript"
+    t.integer  "java"
+    t.integer  "python"
+    t.integer  "ruby_ror"
+    t.integer  "sql"
+    t.integer  "cpp"
+    t.string   "other"
     t.boolean  "hide_email",                                :default => true
     t.boolean  "hide_phone",                                :default => true
     t.boolean  "hide_ims",                                  :default => true
@@ -135,7 +144,7 @@ ActiveRecord::Schema.define(:version => 20110330215316) do
     t.integer  "discussion_section_1",                      :default => 0
     t.integer  "discussion_section_2",                      :default => 0
     t.integer  "discussion_section_3",                      :default => 0
-    t.string   "preferred_teammates"
+    t.text     "preferred_teammates"
   end
 
   add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true

@@ -18,7 +18,7 @@ class User < ActiveRecord::Base
                   :birthday, :about, :location, :school, :occupation, :aim, :live, :skype, 
                   :gtalk, :phone, :hide_email, :hide_phone, :hide_ims, :birthday_privacy, :signup_status,
                   :interest_list, :profile_image, :personal_information_added, :discussion_section_1,
-                  :discussion_section_2, :discussion_section_3, :preferred_teammates
+                  :discussion_section_2, :discussion_section_3, :preferred_teammates, :html, :css, :javascript, :java, :cpp, :python, :ruby_ror, :other, :sql
   
   # Keeps track of the signup step
   attr_accessor :current_step
@@ -36,7 +36,9 @@ class User < ActiveRecord::Base
   # validates_size_of :profile_image, :maximum => 5.megabytes, :if => lambda { |user| user.current_step == 'information_step' }
   
   # Check out app/validators/email_format_validator.rb
-  #validates :email, :email_format => true
+  validates :email, :email_format => true
+  
+  validates_numericality_of :html, :css, :java, :javascript, :sql, :ruby_ror, :python, :cpp
   
   # Overwriting Devise's update_with_password
   def update_with_password(params={})
