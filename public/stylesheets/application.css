@@ -136,6 +136,7 @@ h2 {
   color: #666666;
 }
 p { margin-bottom: 15px; }
+form p { margin: 40px 0; }
 form h3 {
   font-size: 15px;
   font-weight: bold;
