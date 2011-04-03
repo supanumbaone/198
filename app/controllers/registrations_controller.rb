@@ -1,7 +1,7 @@
 # Overriding Devise's registrations_controller
 class RegistrationsController < Devise::RegistrationsController
   #Only authenticate users, if the admin user is present
-  # before_filter :authenticate_user!
+  #before_filter :authenticate_user!
   
   # POST /resource
     def create

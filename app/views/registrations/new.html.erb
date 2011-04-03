@@ -18,5 +18,5 @@
   <p><%= f.label :password_confirmation %><br />
   <%= f.password_field :password_confirmation %></p>
 
-  <p id="form_button"><%= f.submit "Continue to Step 2", :class => "orange_button" %></p>
+  <p id="form_button"><%= f.submit "Continue to Step 2", :class => "orange_button", :disable_with => "Creating Your Account ..." %></p>
 <% end %>

@@ -40,6 +40,7 @@ body {
   font-family: Verdana, Helvetica, Arial;
   font-size: 14px;
 }
+h1, h2, h3, h4 { font-weight: bold; }
 a img { border: none; }
 a {
   color: #2276bb;
@@ -101,9 +102,9 @@ a:hover {
 #logo {
   font-size: 28px;
   font-family: Helvetica, Arial;
-  font-weight: bold;
   margin-bottom: 20px;
 }
+#logo h1 { font-weight: bold; }
 #navigation { margin-bottom: 20px; }
 #introduction { color: #333333; }
 #introduction p {
