@@ -38,8 +38,6 @@ class User < ActiveRecord::Base
   # Check out app/validators/email_format_validator.rb
   validates :email, :email_format => true
   
-  validates_numericality_of :html, :css, :java, :javascript, :sql, :ruby_ror, :python, :cpp
-  
   # Overwriting Devise's update_with_password
   def update_with_password(params={})
     if params[:password].blank? 

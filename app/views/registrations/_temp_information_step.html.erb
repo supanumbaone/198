@@ -218,6 +218,10 @@
 				<%= f.label :sql, "SQL (MySQL, Postgres, etc.)" %>
 				<%= f.select :sql, options_for_select([10,9,8,7,6,5,4,3,2,1,0]) %>
 			</li>
+			<li>
+				<%= f.label :other, "Any Other Languages?" %>
+				<%= f.text_field :other %>
+			</li>
 		</ul>
 	</p>
 
