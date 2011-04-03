@@ -24,7 +24,7 @@ $(document).ready(function() {
 		$(".autocomplete").val("");
 	});
 	
-	$('.dd_trigger').click(function() {
+	$('.team_select').change(function() {
 		$(".target").val($(".target").val() + $(this).val() + "\n");		
 	});
 	
