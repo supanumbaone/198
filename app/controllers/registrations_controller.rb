@@ -3,6 +3,27 @@ class RegistrationsController < Devise::RegistrationsController
   #Only authenticate users, if the admin user is present
   # before_filter :authenticate_user!
   
+  # POST /resource
+    def create
+      build_resource
+
+      if resource.save
+        if resource.active_for_authentication?
+          set_flash_message :notice, :signed_up if is_navigational_format?
+          sign_in(resource_name, resource)
+          respond_with resource, :location => redirect_location(resource_name, resource)
+        else
+          # set_flash_message :notice, :inactive_signed_up, :reason => resource.inactive_message.to_s if is_navigational_format?
+          expire_session_data_after_sign_in!
+          redirect_to waiting_for_confirmation_path
+          # respond_with resource, :location => after_inactive_sign_up_path_for(resource)
+        end
+      else
+        clean_up_passwords(resource)
+        respond_with_navigational(resource) { render_with_scope :new }
+      end
+    end
+  
   # PUT /resource
   def update
     # The step of the wizzard to be rendered next
@@ -62,9 +83,5 @@ class RegistrationsController < Devise::RegistrationsController
     @time_block = TimeBlock.new
     @today = Date.today
     @times = TimeBlock.get_time_list
-  end
-  
-  def after_sign_up_path_for(resource)
-    waiting_for_confirmation_path
   end
 end

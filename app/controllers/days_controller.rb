@@ -1,4 +1,6 @@
 class DaysController < ApplicationController
+  load_and_authorize_resource
+  
   def index
     @days = Day.all
   end

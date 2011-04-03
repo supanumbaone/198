@@ -1,4 +1,5 @@
 class CommentsController < ApplicationController
+  load_and_authorize_resource
   
   def create
     @group = Group.find(params[:group_id])

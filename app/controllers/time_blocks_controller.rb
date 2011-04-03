@@ -1,4 +1,6 @@
 class TimeBlocksController < ApplicationController
+  load_and_authorize_resource
+  
   def index
     @time_blocks = TimeBlock.all
   end

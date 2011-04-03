@@ -1,4 +1,6 @@
 class SchedulesController < ApplicationController
+  load_and_authorize_resource
+  
   def index
     @schedules = Schedule.all
   end
