@@ -63,4 +63,8 @@ class RegistrationsController < Devise::RegistrationsController
     @today = Date.today
     @times = TimeBlock.get_time_list
   end
+  
+  def after_sign_up_path_for(resource)
+    waiting_for_confirmation_path
+  end
 end

@@ -9,6 +9,7 @@ Grooopme::Application.routes.draw do
 
   root :to => "pages#home"
   match "/signed_up" => "pages#signed_up", :as => "signed_up"
+  match "/waiting_for_confirmation" => "pages#waiting_for_confirmation", :as => "waiting_for_confirmation"
   match "/download" => "users#download", :as => "download"
   
   #Comments

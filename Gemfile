@@ -4,7 +4,8 @@ gem 'rails', '3.0.5'
 
 gem 'mysql2'
 gem 'cancan'
-gem 'devise'
+gem 'devise',
+	:git	=> 'https://github.com/plataformatec/devise.git'
 gem 'paperclip'
 gem 'nifty-generators'
 gem 'capistrano'

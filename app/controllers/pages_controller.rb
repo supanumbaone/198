@@ -11,6 +11,9 @@ class PagesController < ApplicationController
   def signed_up
   end
   
+  def waiting_for_confirmation
+  end
+  
   def finished_signup
     if current_user && current_user.signup_status != 'completed' && current_user.confirmed_at
       redirect_to signup_wizard_path(:step => '2', :resource => current_user)
