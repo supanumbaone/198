@@ -1,6 +1,6 @@
 <!-- Important: in Gary wizard  (Step 2 - information step, not including schedule) -->
 
-<h2>Step 2  >  A bit about You</h2>
+<h2>Step 2 > A Bit About You</h2>
 
 <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put, :multipart => true }) do |f| %>
 
@@ -15,33 +15,214 @@
 	</p>
 	<br />
 	<p>
-		Please answer the following questions based on your preference on the time that you plan to attend CSE 110 Monday discussion section.  The choices of time are on Mondays 2pm-2:50pm, 3pm-3:50pm or 4pm-4:50pm.  Please enter 1 to indicate your first choice, 2 for your second choice, 3 for your third choice, or 0 if you can't attend at that time.  If you have no preference among your first and second choice, please enter 2 for both of them.  If you have no preference among your second and third choice, please enter 3 for both of them.  If you have no preference among all your choices, please enter 3 for all of them.
-	  	<tr>
-			<td>What is your attendance preference for Monday from 2pm-2:50pm?<br />
-			Please enter 1 for first choice, 2 for second choice, 3 for third choice, or 0 for not available.</td><br />
-			<td><%= f.select :discussion_section_1, {"1" => 1, "2" => 2, "3" => 3, "0" => 0} %></td>
-		</tr>
-		<br /><br />
-		<tr>
-			<td>What is your attendance preference for Monday from 3pm-3:50pm?<br />
-			Please enter 1 for first choice, 2 for second choice, 3 for third choice, or 0 for not available.</td><br />
-			<td><%= f.select :discussion_section_2, {"1" => 1, "2" => 2, "3" => 3, "0" => 0} %></td>
-		</tr>
-		<br /><br />
-		<tr>
-			<td>What is your attendance preference for Monday from 4pm-4:50pm?<br />
-			Please enter 1 for first choice, 2 for second choice, 3 for third choice, or 0 for not available.</td><br />
-			<td><%= f.select :discussion_section_3, {"1" => 1, "2" => 2, "3" => 3, "0" => 0} %></td>
-		</tr>
+		<h3>Monday Availability</h3>
+		<span class="instructions">Please answer the following questions based on your preference on the time that you plan to attend CSE 110 Monday discussion section.  The choices of time are on Mondays 2pm-2:50pm, 3pm-3:50pm or 4pm-4:50pm.  Please enter 1 to indicate your first choice, 2 for your second choice, 3 for your third choice, or 0 if you can't attend at that time.  If you have no preference among your first and second choice, please enter 2 for both of them.  If you have no preference among your second and third choice, please enter 3 for both of them.  If you have no preference among all your choices, please enter 3 for all of them.</span>
+		<table>
+		  	<tr>
+				<td>What is your attendance preference for Monday from 2pm-2:50pm?
+				<span class="info">Please enter 1 for first choice, 2 for second choice, 3 for third choice, or 0 for not available.</span></td>
+				<td><%= f.select :discussion_section_1, {"1" => 1, "2" => 2, "3" => 3, "0" => 0} %></td>
+			</tr>
+			<tr>
+				<td>What is your attendance preference for Monday from 3pm-3:50pm?
+				<span class="info">Please enter 1 for first choice, 2 for second choice, 3 for third choice, or 0 for not available.</span></td>
+				<td><%= f.select :discussion_section_2, {"1" => 1, "2" => 2, "3" => 3, "0" => 0} %></td>
+			</tr>
+			<tr>
+				<td>What is your attendance preference for Monday from 4pm-4:50pm?
+				<span class="info">Please enter 1 for first choice, 2 for second choice, 3 for third choice, or 0 for not available.</span></td>
+				<td><%= f.select :discussion_section_3, {"1" => 1, "2" => 2, "3" => 3, "0" => 0} %></td>
+			</tr>
+		</table>
 	</p>
 	<br />
 	<p>
-		<%= f.label "(Optional) Enter in the ucsd.edu email addresses of CSE 110 students you prefer to be grouped with. If more than one, separate the email addresses with commas." %><br />
-	  	<%= f.text_field :preferred_teammates %>
+		<h3>Your Friends</h3>
+		<span class="info"><%= f.label "(Optional) Open the dropdown and click the name of a friend you want to work with or start typing a name on the left and click one from the selection. Click Add to Friends to add them to the text field below. You can use both the dropdown and the text field multiple times." %></span>
+		
+	  	<div id ="friends_selection">
+		
+	  		<div class="floatLeft">
+				<input type="text" class="autocomplete"></input><%= link_to "Add To Friends", "javascript:void(0);", :class => "orange_button teammate_trigger" %>
+			</div>
+			
+			<div class="floatRight">
+				<select>
+					<option selected="selected">Choose A Friend</option>
+					<option>------------</option>
+					<option class="dd_trigger" value="Aria Andre Arasteh <aarasteh@ucsd.edu>">Aria Andre Arasteh</option>
+					<option class="dd_trigger" value="Franklin Yuqin Zhou <fyzhou@ucsd.edu>">Franklin Yuqin Zhou</option>
+					<option class="dd_trigger" value="Nathaniel Charle Asuncion <nasuncio@ucsd.edu>">Nathaniel Charle Asuncion</option>
+					<option class="dd_trigger" value="Jong Wo Yoon <jwyoon@ucsd.edu>">Jong Wo Yoon</option>
+					<option class="dd_trigger" value="Alvin Carin Bundalian <abundali@ucsd.edu>">Alvin Carin Bundalian</option>
+					<option class="dd_trigger" value="Joyc Yeh <j6yeh@ucsd.edu>">Joyc Yeh</option>
+					<option class="dd_trigger" value="Jackson Pau Callaway <jcallawa@ucsd.edu>">Jackson Pau Callaway</option>
+					<option class="dd_trigger" value="Chienmin Yang <chy006@ucsd.edu>">Chienmin Yang</option>
+					<option class="dd_trigger" value="Lance Salvado Castillo <lscastil@ucsd.edu>">Lance Salvado Castillo</option>
+					<option class="dd_trigger" value="Pengy Wang <pew007@ucsd.edu>">Pengy Wang</option>
+					<option class="dd_trigger" value="Jacky  Chan <j5chan@ucsd.edu>">Jacky  Chan</option>
+					<option class="dd_trigger" value="John Josep Vivio <jvivio@ucsd.edu>">John Josep Vivio</option>
+					<option class="dd_trigger" value="Christopher Chen-kun Chang <c2chang@ucsd.edu>">Christopher Chen-kun Chang</option>
+					<option class="dd_trigger" value="Victor  Vazquez <vmvazque@ucsd.edu>">Victor  Vazquez</option>
+					<option class="dd_trigger" value="Chuan Y Chang <cyc025@ucsd.edu>">Chuan Y Chang</option>
+					<option class="dd_trigger" value="Yun-Tsan Tsai <y3tsai@ucsd.edu>">Yun-Tsan Tsai</option>
+					<option class="dd_trigger" value="Yuj Chang <yuc026@ucsd.edu>">Yuj Chang</option>
+					<option class="dd_trigger" value="Feira Tao <ftao@ucsd.edu>">Feira Tao</option>
+					<option class="dd_trigger" value="Arick  Chow <aychow@ucsd.edu>">Arick  Chow</option>
+					<option class="dd_trigger" value="Carla Emil Sun <cesun@ucsd.edu>">Carla Emil Sun</option>
+					<option class="dd_trigger" value="Neyv Cisneros <ncisnero@ucsd.edu>">Neyv Cisneros</option>
+					<option class="dd_trigger" value="Justin Rober Shitanishi <jshitani@ucsd.edu>">Justin Rober Shitanishi</option>
+					<option class="dd_trigger" value="Crystal T Cross <ctcross@ucsd.edu>">Crystal T Cross</option>
+					<option class="dd_trigger" value="Jae  Shin <jws001@ucsd.edu>">Jae  Shin</option>
+					<option class="dd_trigger" value="Jonathan Hoize Cui <jhcui@ucsd.edu>">Jonathan Hoize Cui</option>
+					<option class="dd_trigger" value="Andrew Yee Shen <ayshen@ucsd.edu>">Andrew Yee Shen</option>
+					<option class="dd_trigger" value="Anthon Dang <a6dang@ucsd.edu>">Anthon Dang</option>
+					<option class="dd_trigger" value="Parima Aja Shah <pashah@ucsd.edu>">Parima Aja Shah</option>
+					<option class="dd_trigger" value="Aravindh Dill Dorai <adorai@ucsd.edu>">Aravindh Dill Dorai</option>
+					<option class="dd_trigger" value="Fredd Espino <fespino@ucsd.edu>">Fredd Espino</option>
+					<option class="dd_trigger" value="Gar Wang <g5wang@ucsd.edu>">Gar Wang</option>
+					<option class="dd_trigger" value="Jordan Isaa Sendar <jsendar@ucsd.edu>">Jordan Isaa Sendar</option>
+					<option class="dd_trigger" value="Patric Guan <pguan@ucsd.edu>">Patric Guan</option>
+					<option class="dd_trigger" value="Jake Benjami Rabinowitz <jrabinow@ucsd.edu>">Jake Benjami Rabinowitz</option>
+					<option class="dd_trigger" value="Nathan Alexande Heisey <nheisey@ucsd.edu>">Nathan Alexande Heisey</option>
+					<option class="dd_trigger" value="Con Qin <coqin@ucsd.edu>">Con Qin</option>
+					<option class="dd_trigger" value="Gabriel Ponce <gaponce@ucsd.edu>">Gabriel Ponce</option>
+					<option class="dd_trigger" value="Hyeong Mi An <hman@ucsd.edu>">Hyeong Mi An</option>
+					<option class="dd_trigger" value="Helen Min Ke Wong <hmwong@ucsd.edu>">Helen Min Ke Wong</option>
+					<option class="dd_trigger" value="Hosoo Christophe Choi <hcchoi@ucsd.edu>">Hosoo Christophe Choi</option>
+					<option class="dd_trigger" value="Austin Colema Hill <a2hill@ucsd.edu>">Austin Colema Hill</option>
+					<option class="dd_trigger" value="William Jorda Holloway <wjhollow@ucsd.edu>">William Jorda Holloway</option>
+					<option class="dd_trigger" value="Alexander Becket Peterson <abpeters@ucsd.edu>">Alexander Becket Peterson</option>
+					<option class="dd_trigger" value="Ambu Punn <apunn@ucsd.edu>">Ambu Punn</option>
+					<option class="dd_trigger" value="Joe Jauregui <jjauregu@ucsd.edu>">Joe Jauregui</option>
+					<option class="dd_trigger" value="Jun Kim <juk018@ucsd.edu>">Jun Kim</option>
+					<option class="dd_trigger" value="Nicholas Matthe Lau <nmlau@ucsd.edu>">Nicholas Matthe Lau</option>
+					<option class="dd_trigger" value="Oren Michae Radousky <oradousk@ucsd.edu>">Oren Michae Radousky</option>
+					<option class="dd_trigger" value="Olg Sorokina <osorokin@ucsd.edu>">Olg Sorokina</option>
+					<option class="dd_trigger" value="Jonathan Rya Nogales <jnogales@ucsd.edu>">Jonathan Rya Nogales</option>
+					<option class="dd_trigger" value="Quyn Nguyen <qun003@ucsd.edu>">Quyn Nguyen</option>
+					<option class="dd_trigger" value="Andrew Cheuk-Wa Ng <acng@ucsd.edu>">Andrew Cheuk-Wa Ng</option>
+					<option class="dd_trigger" value="Andrew Desmon Budiman <adbudima@ucsd.edu>">Andrew Desmon Budiman</option>
+					<option class="dd_trigger" value="James Ceci Newman <jcnewman@ucsd.edu>">James Ceci Newman</option>
+					<option class="dd_trigger" value="Jane Barrientos <jabarrie@ucsd.edu>">Jane Barrientos</option>
+					<option class="dd_trigger" value="Quan Min Le <qmle@ucsd.edu>">Quan Min Le</option>
+					<option class="dd_trigger" value="Radley Edwi Angelo <rangelo@ucsd.edu>">Radley Edwi Angelo</option>
+					<option class="dd_trigger" value="Richard  Castro <rscastro@ucsd.edu>">Richard  Castro</option>
+					<option class="dd_trigger" value="Christopher Hon Leung <c4leung@ucsd.edu>">Christopher Hon Leung</option>
+					<option class="dd_trigger" value="David Alexande Ing <ding@ucsd.edu>">David Alexande Ing</option>
+					<option class="dd_trigger" value="Davi Yoo <dayoo@ucsd.edu>">Davi Yoo</option>
+					<option class="dd_trigger" value="Daniel Isaa Valles <dvalles@ucsd.edu>">Daniel Isaa Valles</option>
+					<option class="dd_trigger" value="Dao Din Lam <d2lam@ucsd.edu>">Dao Din Lam</option>
+					<option class="dd_trigger" value="Dorothy Phuong Khan Nguyen <dpn003@ucsd.edu>">Dorothy Phuong Khan Nguyen</option>
+					<option class="dd_trigger" value="Rafael Jos Nevarez <rnevarez@ucsd.edu>">Rafael Jos Nevarez</option>
+					<option class="dd_trigger" value="Solomo Davidsohn <sdavidso@ucsd.edu>">Solomo Davidsohn</option>
+					<option class="dd_trigger" value="Sally Chen Do <s2do@ucsd.edu>">Sally Chen Do</option>
+					<option class="dd_trigger" value="Samson Richar Wong <srwong@ucsd.edu>">Samson Richar Wong</option>
+					<option class="dd_trigger" value="Shen Wang <shw003@ucsd.edu>">Shen Wang</option>
+					<option class="dd_trigger" value="Sangjoo Lee <sal009@ucsd.edu>">Sangjoo Lee</option>
+					<option class="dd_trigger" value="She Tian <stian@ucsd.edu>">She Tian</option>
+					<option class="dd_trigger" value="Sand Lim <salim@ucsd.edu>">Sand Lim</option>
+					<option class="dd_trigger" value="Sheldon Rya Tanaka <srtanaka@ucsd.edu>">Sheldon Rya Tanaka</option>
+					<option class="dd_trigger" value="Scott Anthon Schmidl <sschmidl@ucsd.edu>">Scott Anthon Schmidl</option>
+					<option class="dd_trigger" value="Henr Lin <helin@ucsd.edu>">Henr Lin</option>
+					<option class="dd_trigger" value="Andrew Josep Muinos <amuinos@ucsd.edu>">Andrew Josep Muinos</option>
+					<option class="dd_trigger" value="Suma Malani <smalani@ucsd.edu>">Suma Malani</option>
+					<option class="dd_trigger" value="Tyler Davi Hodgkins <thodgkin@ucsd.edu>">Tyler Davi Hodgkins</option>
+					<option class="dd_trigger" value="Thanh Tha Tran <ttt031@ucsd.edu>">Thanh Tha Tran</option>
+					<option class="dd_trigger" value="Thomas Da Hoffman <thoffman@ucsd.edu>">Thomas Da Hoffman</option>
+					<option class="dd_trigger" value="Thinh Hu Nguyen <thn024@ucsd.edu>">Thinh Hu Nguyen</option>
+					<option class="dd_trigger" value="Ashle McGuire <amcguire@ucsd.edu>">Ashle McGuire</option>
+					<option class="dd_trigger" value="Brian Huyn Duong <b1duong@ucsd.edu>">Brian Huyn Duong</option>
+					<option class="dd_trigger" value="Benjamin Ge Young <byoung@ucsd.edu>">Benjamin Ge Young</option>
+					<option class="dd_trigger" value="Bryant Jonatha Kou <bkou@ucsd.edu>">Bryant Jonatha Kou</option>
+					<option class="dd_trigger" value="Brian Case Yip <bcyip@ucsd.edu>">Brian Case Yip</option>
+					<option class="dd_trigger" value="Byung Joo Lee <bjl007@ucsd.edu>">Byung Joo Lee</option>
+					<option class="dd_trigger" value="Brian Nh Truong <bntruong@ucsd.edu>">Brian Nh Truong</option>
+					<option class="dd_trigger" value="Bowe Shu <boshu@ucsd.edu>">Bowe Shu</option>
+					<option class="dd_trigger" value="Lewis Brandon Dougla Miller <lbmiller@ucsd.edu>">Lewis Brandon Dougla Miller</option>
+					<option class="dd_trigger" value="Maria De La Lu Gaeta <mgaeta@ucsd.edu>">Maria De La Lu Gaeta</option>
+					<option class="dd_trigger" value="Michael Franci Taberner <mtaberne@ucsd.edu>">Michael Franci Taberner</option>
+					<option class="dd_trigger" value="Minh  Ta <mqta@ucsd.edu>">Minh  Ta</option>
+					<option class="dd_trigger" value="Masaki Bria Sono <msono@ucsd.edu>">Masaki Bria Sono</option>
+					<option class="dd_trigger" value="Matthew Christophe Borger <mborger@ucsd.edu>">Matthew Christophe Borger</option>
+					<option class="dd_trigger" value="Matthew Kay Ye Chu <mkchu@ucsd.edu>">Matthew Kay Ye Chu</option>
+					<option class="dd_trigger" value="Michael Sieng Lun Hii <mhii@ucsd.edu>">Michael Sieng Lun Hii</option>
+					<option class="dd_trigger" value="Melvin U Fa Sin <msin@ucsd.edu>">Melvin U Fa Sin</option>
+					<option class="dd_trigger" value="Mahir Sing Kalra <mskalra@ucsd.edu>">Mahir Sing Kalra</option>
+					<option class="dd_trigger" value="Miguel Vicent Paysan <mpaysan@ucsd.edu>">Miguel Vicent Paysan</option>
+					<option class="dd_trigger" value="Matthe Olaranont <molarano@ucsd.edu>">Matthe Olaranont</option>
+					<option class="dd_trigger" value="Haronid Mille Moncivais <hmonciva@ucsd.edu>">Haronid Mille Moncivais</option>
+					<option class="dd_trigger" value="Derrick Josep McMillen <dmcmille@ucsd.edu>">Derrick Josep McMillen</option>
+					<option class="dd_trigger" value="Elioth Artur Almada <ealmada@ucsd.edu>">Elioth Artur Almada</option>
+					<option class="dd_trigger" value="Evan Keit Walker <ekwalker@ucsd.edu>">Evan Keit Walker</option>
+					<option class="dd_trigger" value="Eric Yanho Chung <e5chung@ucsd.edu>">Eric Yanho Chung</option>
+					<option class="dd_trigger" value="Edwi Tao <etao@ucsd.edu>">Edwi Tao</option>
+					<option class="dd_trigger" value="Eri Gallegos <ergalleg@ucsd.edu>">Eri Gallegos</option>
+					<option class="dd_trigger" value="Ernes Lim <erlim@ucsd.edu>">Ernes Lim</option>
+					<option class="dd_trigger" value="Jonatha Masehi-Lano <jmasehil@ucsd.edu>">Jonatha Masehi-Lano</option>
+					<option class="dd_trigger" value="Kerwin Almer Manalan Azares <kazares@ucsd.edu>">Kerwin Almer Manalan Azares</option>
+					<option class="dd_trigger" value="Kevin  Zhang <k7zhang@ucsd.edu>">Kevin  Zhang</option>
+					<option class="dd_trigger" value="Kevin Castana Caasi <kcaasi@ucsd.edu>">Kevin Castana Caasi</option>
+					<option class="dd_trigger" value="Kiley Hyu Sok <shsok@ucsd.edu>">Kiley Hyu Sok</option>
+					<option class="dd_trigger" value="Kevin Kyong Ji Chon <kkchon@ucsd.edu>">Kevin Kyong Ji Chon</option>
+					<option class="dd_trigger" value="Kurt Bradle Selander <kselande@ucsd.edu>">Kurt Bradle Selander</option>
+					<option class="dd_trigger" value="Kevi He <kehe@ucsd.edu>">Kevi He</option>
+					<option class="dd_trigger" value="Kristina Lyn Pinkerton <kpinkert@ucsd.edu>">Kristina Lyn Pinkerton</option>
+					<option class="dd_trigger" value="Kayla Mari Kimura <kmkimura@ucsd.edu>">Kayla Mari Kimura</option>
+					<option class="dd_trigger" value="Kazuhit Ochiai <kaochiai@ucsd.edu>">Kazuhit Ochiai</option>
+					<option class="dd_trigger" value="Kelvin Gernat Lapidario <klapidar@ucsd.edu>">Kelvin Gernat Lapidario</option>
+					<option class="dd_trigger" value="Kwan Chu Lee <kcl007@ucsd.edu>">Kwan Chu Lee</option>
+					<option class="dd_trigger" value="Kevin Estuard Lau Fang <klaufang@ucsd.edu>">Kevin Estuard Lau Fang</option>
+					<option class="dd_trigger" value="Kenneth Yuet Ku Law <klaw@ucsd.edu>">Kenneth Yuet Ku Law</option>
+				</select>
+			</div>
+			<div class="clear"></div>
+	  	</div>
+		
+		<%= f.text_area :preferred_teammates, :class => "target", :rows => 10 %>
+	</p>
+	
+	<p>
+		<h3>Programming Proficiency</h3>
+		<span class="info">How well do you know these languages? 10 for Expert, 0 for No Knowledge</span>
+		<ul id="programming_languages">
+			<li>
+				<%= f.label :html, "HTML" %>
+				<%= f.select :html, options_for_select([10,9,8,7,6,5,4,3,2,1,0]) %>
+			</li>
+			<li>
+				<%= f.label :css, "CSS" %>
+				<%= f.select :css, options_for_select([10,9,8,7,6,5,4,3,2,1,0]) %>
+			</li>
+			<li>
+				<%= f.label :javascript, "Javascript" %>
+				<%= f.select :javascript, options_for_select([10,9,8,7,6,5,4,3,2,1,0]) %>
+			</li>
+			<li>
+				<%= f.label :java, "Java" %>
+				<%= f.select :java, options_for_select([10,9,8,7,6,5,4,3,2,1,0]) %>
+			</li>
+			<li>
+				<%= f.label :cpp, "C/C++" %>
+				<%= f.select :cpp, options_for_select([10,9,8,7,6,5,4,3,2,1,0]) %>
+			</li>
+			<li>
+				<%= f.label :python, "Python" %>
+				<%= f.select :python, options_for_select([10,9,8,7,6,5,4,3,2,1,0]) %>
+			</li>
+			<li>
+				<%= f.label :ruby_ror, "Ruby/Ruby on Rails" %>
+				<%= f.select :ruby_ror, options_for_select([10,9,8,7,6,5,4,3,2,1,0]) %>
+			</li>
+			<li>
+				<%= f.label :sql, "SQL (MySQL, Postgres, etc.)" %>
+				<%= f.select :sql, options_for_select([10,9,8,7,6,5,4,3,2,1,0]) %>
+			</li>
+		</ul>
 	</p>
 
-	<p><%= f.submit "Continue" %></p>
-	<p><%= f.submit "Back", :name => "back_button" %></p>
+	<p id="form_button"><%= f.submit "Continue to Step 3", :class => "orange_button" %> or 
+	<%= f.submit "Back", :name => "back_button", :class => "back_button" %></p>
 	
 	<%= hidden_field_tag 'step', '2' %>
 <% end %>

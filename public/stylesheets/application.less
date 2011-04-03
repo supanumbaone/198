@@ -48,12 +48,13 @@ a {
 }
 
 #container {
-  width: 75%;
+  width: 60%;
   margin: 0 auto;
   background-color: #FFF;
-  padding: 20px 40px;
+  padding: 20px 60px;
   border: solid 1px #d8d8d8;
   margin-top: 20px;
+  .rounded_corners(3px);
 }
 
 #flash_notice, #flash_error, #flash_alert {
@@ -103,6 +104,50 @@ a {
   margin: 0;
 }
 
+/* HOME PAGE */
+
+#logo {
+	font-size: 28px;
+	font-family: Helvetica, Arial;
+	font-weight: bold;
+	margin-bottom: 20px;
+}
+
+#navigation {
+	margin-bottom: 20px;
+}
+
+#introduction {
+	color: #333;
+	
+	p {
+		font-size: 18px;
+		margin-bottom: 40px;
+		line-height: 1.2em;
+	}
+	
+	ul {
+		font-size: 14px;
+		margin-bottom: 40px;
+		
+		h3 {
+			font-weight: bold;
+			color: #333;
+			font-size: 16px;
+			margin-bottom: 10px;
+			font-family: Arial;
+		}
+		
+		li {
+			list-style: disc inside;
+		}
+	}
+	
+	.orange_button {
+		margin: 20px 0;
+	}
+}
+
 
 /* FORM STYLING */
 
@@ -123,14 +168,28 @@ p {
 	margin-bottom: 15px;
 }
 
+form h3 {
+	font-size: 15px;
+	font-weight: bold;
+	margin-bottom: 10px;
+	font-family: Helvetica, Arial;
+}
+
 .label {
+	display: block;
 	font-size: 16px;
 }
 
-input {
+input[type="text"], input[type="password"] {
 	border: 3px solid #d8d8d8;
 	padding: 3px 5px;
 	.rounded_corners(3px);
+	margin-top: 5px;
+}
+
+textarea {
+	padding: 10px;
+	width: 60%;
 }
 
 .orange_button {
@@ -173,6 +232,7 @@ input {
 		background: #FFA33A; /* old browsers */
 		background: -moz-linear-gradient(top, #FFA33A 0%, #F7741D 100%); /* firefox */
 		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFA33A), color-stop(100%,#F7741D)); /* webkit */	
+		text-decoration: none;
 	}
 	
 	:active {
@@ -185,6 +245,13 @@ input {
 	}
 }
 
+#form_button {
+	display: block;
+	border-top: 1px dotted #d8d8d8;
+	padding: 20px 0px;
+	margin-top: 40px;
+}
+
 #form_tools {
 	padding-top: 15px;
 	display: block;
@@ -195,4 +262,67 @@ input {
 	li {
 		margin-bottom: 5px;
 	}
+}
+
+.instructions {
+	display: block;
+	font-size: 14px;
+	margin-bottom: 25px;
+}
+
+table {
+	td {
+		font-size: 13px;
+	}
+	
+}
+
+.ui-autocomplete {
+	background: #fff;
+	width: 400px;
+	border: 1px solid #d8d8d8;
+	font-size: 12px;
+	-moz-border-radius: 5px;
+	  -webkit-border-radius: 5px;
+	  border-radius: 5px;
+	  box-shadow: 0px 1px 4px #bdbcb0; -webkit-box-shadow: 0px 1px 4px #bdbcb0; -moz-box-shadow: 0px 1px 4px #bdbcb0;
+	
+	li {
+		padding: 5px 0;
+		border-bottom: 1px solid #d8d8d8;
+	}
+}
+
+.autocomplete {
+	width: 50%;
+	margin-right: 10px;
+}
+
+#programming_languages{
+	margin-top: 10px;
+	
+	li {
+		padding: 3px 0;
+	}
+	
+	label {
+		width: 220px;
+		display: inline-block;
+	}
+}
+
+#friends_selection {
+	display: block;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.floatLeft {
+	float: left;
+}
+.floatRight {
+	float: right;
+}
+.clear {
+	clear: both;
 }

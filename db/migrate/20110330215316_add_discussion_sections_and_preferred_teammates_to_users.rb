@@ -3,7 +3,7 @@ class AddDiscussionSectionsAndPreferredTeammatesToUsers < ActiveRecord::Migratio
     add_column :users, :discussion_section_1, :integer, :default => 0
     add_column :users, :discussion_section_2, :integer, :default => 0
     add_column :users, :discussion_section_3, :integer, :default => 0
-    add_column :users, :preferred_teammates, :string
+    add_column :users, :preferred_teammates, :text
   end
 
   def self.down

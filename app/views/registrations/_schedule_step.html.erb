@@ -12,8 +12,7 @@
 		<%= render "conventional_simple_schedule", :f => f %>
 	<% end %>
 
-	<p><%= f.submit "Continue" %></p>
-	<p><%= f.submit "Back", :name => "back_button" %></p>
+	<p id="form_button"><%= f.submit "Continue", :class => "orange_button" %> or <%= f.submit "Back", :name => "back_button", :class => "back_button" %></p>
 	
 	<%= hidden_field_tag 'resource', @resource %>
 <% end %>
