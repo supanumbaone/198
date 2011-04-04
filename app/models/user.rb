@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable, :lockable and :timeoutable
-  devise :database_authenticatable, :registerable, :confirmable,
+  devise :database_authenticatable, :registerable, # :confirmable,
          :recoverable, :rememberable, :trackable, :validatable
   
   # Alias for <tt>acts_as_taggable_on :tags</tt>: <tt>acts_as_taggable</tt>  
@@ -51,6 +51,25 @@ class User < ActiveRecord::Base
   def has_schedule?
     self.schedule != nil
   end
+
+  # Name <email>  =>  email
+  def parse_preferred_friends
+    list = ""
+    if self.preferred_friends
+      friends = self.preferred_friends.split("\r\n").collect{ |s| s.to_i }
+      friends.each do |friend|
+        list += "#{friend.split("<")[1].split(">")[0]},"
+      end
+      list = list[0..(list.size-2)]
+    end
+    
+    list
+  end
+  
+  # Does the user have a group?
+  # def has_group?
+    
+  # end
   
   # Given a schedule, create days with dates
   # Where a chunk_of_time is "morning" | "afternoon" | "evening"
@@ -122,7 +141,7 @@ class User < ActiveRecord::Base
     users_to_be_exported = []
     
     users.each do |user|
-      temp = "#{user.email},#{user.discussion_section_1},#{user.discussion_section_2},#{user.discussion_section_3}:#{user.preferred_teammates}:".gsub(/\s/,"")
+      temp = "#{user.email},#{user.discussion_section_1},#{user.discussion_section_2},#{user.discussion_section_3}:#{user.parse_preferred_friends}:".gsub(/\s/,"")
       if user.schedule
         user.schedule.days.each do |day|
           day.time_blocks.each do |block|

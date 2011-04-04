@@ -22,31 +22,38 @@ class Group < ActiveRecord::Base
   def self.export
     groups = Group.all
     days = %w(Monday Tuesday Wednesday Thursday Friday Saturday Sunday)
+    blocks = %w(morning afternoon evening)
     export_users = []
-    export_users << "Name,Email,,M,,,T,,,W,,,Th,,,F,,,S,,,Su,,Preferred Friends"
-    export_users << ",,am,noon,pm,am,noon,pm,am,noon,pm,am,noon,pm,am,noon,pm,am,noon,pm,am,noon,pm,"
+    # export_users << "Name,Email,,M,,,T,,,W,,,Th,,,F,,,S,,,Su,,Preferred Friends"
+    # export_users << ",,am,noon,pm,am,noon,pm,am,noon,pm,am,noon,pm,am,noon,pm,am,noon,pm,am,noon,pm,"
     groups.each do |group|
       group.users.each do |user|
         user_days = []
-        user_line = "#{user.first_name} #{user.last_name},#{user.email},"
+        user_line = []
+        7.times { user_days << ["","",""] }
+        user_line << user.last_name
+        user_line << user.first_name
+        user_line << user.eamil
+        user_line << group.name
         if user.schedule
           user.schedule.days.each do |day|
             if day
               day.time_blocks.each do |block|
-                if block
-                  user_days[days.index(day.name)] += "Y,"
-                else
-                  user_days[days.index(day.name)] += ","
-                end
+                user_days[days.index(day.name)][blocks.index(block.chunk_of_time)] = "Y"
               end
             end
           end
-          
-          export_users.each do |e_user|
-            # here
+          user_days.each do |u_day|
+            u_day.each do |u_block|
+              user_line << u_block
+            end
           end
         end
+        export_users << user_line
       end
+      export_users << nil
     end
+    
+    export_users
   end
 end

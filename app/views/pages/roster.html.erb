@@ -1,0 +1,63 @@
+<table>
+	<tr>
+		<th>Last Name</th>
+		<th>First Name</th>
+		<th>Email</th>
+		<th>Group</th>
+		<th></th>
+		<th>M</th>
+		<th></th>
+		<th></th>
+		<th>T</th>
+		<th></th>
+		<th></th>
+		<th>W</th>
+		<th></th>
+		<th></th>
+		<th>Th</th>
+		<th></th>
+		<th></th>
+		<th>F</th>
+		<th></th>
+		<th></th>
+		<th>S</th>
+		<th></th>
+		<th></th>
+		<th>Su</th>
+		<th></th>
+	</tr>
+	<tr>
+		<th></th>
+		<th></th>
+		<th></th>
+		<th></th>
+		<th>am</th>
+		<th>noon</th>
+		<th>pm</th>
+		<th>am</th>
+		<th>noon</th>
+		<th>pm</th>
+		<th>am</th>
+		<th>noon</th>
+		<th>pm</th>
+		<th>am</th>
+		<th>noon</th>
+		<th>pm</th>
+		<th>am</th>
+		<th>noon</th>
+		<th>pm</th>
+		<th>am</th>
+		<th>noon</th>
+		<th>pm</th>
+		<th>am</th>
+		<th>noon</th>
+		<th>pm</th>
+	</tr>
+	<% @users.each do |user| %>
+		<tr>
+			<% user.each do |attribute| %>
+				<td><%= attribute %></td>
+			<% end %>
+		</tr>
+	<% end %>
+</table>

@@ -14,6 +14,8 @@ module Grooopme
     
     # Confgiure mailer
     config.action_mailer.delivery_method   = :smtp
+    # config.action_mailer.delivery_method   = :postmark
+    # config.action_mailer.postmark_settings = { :api_key => "328e1c61-2d74-4294-9b19-b66722fdc61d" }
 
     # Custom directories with classes and modules you want to be autoloadable.
     # config.autoload_paths += %W(#{config.root}/extras)
