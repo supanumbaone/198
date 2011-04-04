@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110330215316) do
+ActiveRecord::Schema.define(:version => 20110404045459) do
 
   create_table "comments", :force => true do |t|
     t.integer  "commentable_id",   :default => 0
@@ -145,6 +145,7 @@ ActiveRecord::Schema.define(:version => 20110330215316) do
     t.integer  "discussion_section_2",                      :default => 0
     t.integer  "discussion_section_3",                      :default => 0
     t.text     "preferred_teammates"
+    t.boolean  "admin",                                     :default => false
   end
 
   add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true
