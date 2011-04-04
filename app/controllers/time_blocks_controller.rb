@@ -39,7 +39,7 @@ class TimeBlocksController < ApplicationController
           
           # Create a schedule for the user if the user does not already have one
           if @user.has_schedule?
-            @schedule = Schedule.where(:user_id => @user.id)
+            @schedule = Schedule.where(:user_id => @user.id).first
           else
             @schedule = Schedule.new(:user_id => @user.id)
             @schedule.save
