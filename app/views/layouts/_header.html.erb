@@ -1,3 +1,7 @@
+<% if user_signed_in? %>
+	<%= link_to "Logout", destroy_user_session_path %>
+<% end %>
+
 <div id="logo">
 	<h1><%= link_to "UCSD CSE 110 Student Grouper", root_url %></h1>
 </div>
