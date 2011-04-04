@@ -232,8 +232,11 @@
 			</li>
 		</ul>
 	</p>
-
-	<p id="form_button"><%= f.submit "Continue to Step 3", :class => "orange_button" %>
 	
-	<%= hidden_field_tag 'step', '2' %>
+	<% if current_user.signup_status == 'completed' %>
+		<p id="form_button"><%= f.submit "Update", :class => "orange_button" %>
+	<% else %>
+		<p id="form_button"><%= f.submit "Continue to Step 3", :class => "orange_button" %>
+		<%= hidden_field_tag 'step', '2' %>
+	<% end %>
 <% end %>

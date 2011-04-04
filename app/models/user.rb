@@ -94,10 +94,17 @@ class User < ActiveRecord::Base
   
   # Given a schedule, create days with names
   # Where a chunk_of_time is "morning" | "afternoon" | "evening"
-  def add_day_chunks_to_schedule(time_blocks, schedule)
+  def add_day_chunks_to_schedule(time_blocks, schedule, user)
     time_blocks.each do |block|
       day_of_week = block.split("_")[0]
       chunk_of_time = block.split("_")[1]
+      
+      # Delete all days in case user is updating schedule
+      if user.schedule && user.schedule.days
+        user.schedule.days.each do |day|
+          day.destroy
+        end
+      end
       
       if Day.exists?(day_of_week, schedule.id)
         day = Day.where(:name => day_of_week, :schedule_id => schedule.id).first

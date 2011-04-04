@@ -8,9 +8,12 @@ class ApplicationController < ActionController::Base
   end
   
   def after_sign_in_path_for(resource)
-    if resource.is_a?(User) && resource.signup_status != 'completed'
+    if resource.is_a?(User) && resource.signup_status == 'account_step'
       flash[:notice] = "Cool. Now tell us a bit about you.. "
       signup_wizard_path(:step => '2', :resource => resource)
+    elsif resource.is_a?(User) && resource.signup_status == 'schedule_step'
+      flash[:notice] = "Now that we've confirmed a bit of information, what times are you free?"
+      signup_wizard_path(:step => '3', :resource => resource)
     else
       super
     end

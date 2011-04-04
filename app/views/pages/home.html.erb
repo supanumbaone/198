@@ -1,17 +1,30 @@
-<div id="introduction">
-	<p>Hello and welcome to the student grouper. We will be using the following information to best match you up in a group for this quarter. Please fill out the form honestly and with accuracy. It should take you less than 5 minutes and it consists of 3 simple steps.</p>
-
+<% if user_signed_in? %>
+	<h1>Thanks for signing up!</h1>
+	<p>
+		You will be emailed when your group has been formed. You will also be notified when you are able to utilize further group-related features of this application.
+	</p>
 	<ul>
-		<h3>Form Steps</h3>
-		<li>Verify Your UCSD Email</li>
-		<li>Get Some General Information (Coding Skills and Preferred Teammates)</li>
-		<li>Get Your Availability Times</li>
+		<li>You can also change any of your account information by clicking one of the links below.</li>
+		<li><%= link_to "Edit Login Info", edit_user_registration_path %></li>
+		<li><%= link_to "Edit Personal Information", signup_wizard_path(:step => '2') %></li>
+		<li><%= link_to "Edit Availability", signup_wizard_path(:step => '3') %></li>
 	</ul>
+<% else %>
+	<div id="introduction">
+		<p>Hello and welcome to the student grouper. We will be using the following information to best match you up in a group for this quarter. Please fill out the form honestly and with accuracy. It should take you less than 5 minutes and it consists of 3 simple steps.</p>
 
-	<%= link_to "Get Started", new_user_registration_path, :class => "orange_button" %> or <%= link_to "Login to an Existing Account", new_user_session_path %>
-</div>
+		<ul>
+			<h3>Form Steps</h3>
+			<li>Verify Your UCSD Email</li>
+			<li>Get Some General Information (Coding Skills and Preferred Teammates)</li>
+			<li>Get Your Availability Times</li>
+		</ul>
 
-<div style="display:none">
-	<%= link_to "download users", download_path(:export_type => "user") %>
-	<%= link_to "download schedule", download_path(:export_type => "schedule") %>
-</div>
+		<%= link_to "Get Started", new_user_registration_path, :class => "orange_button" %> or <%= link_to "Login to an Existing Account", new_user_session_path %>
+	</div>
+
+	<div style="display:none">
+		<%= link_to "download users", download_path(:export_type => "user") %>
+		<%= link_to "download schedule", download_path(:export_type => "schedule") %>
+	</div>
+<% end %>
