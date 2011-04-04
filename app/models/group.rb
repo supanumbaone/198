@@ -33,7 +33,7 @@ class Group < ActiveRecord::Base
         7.times { user_days << ["","",""] }
         user_line << user.last_name
         user_line << user.first_name
-        user_line << user.eamil
+        user_line << user.email
         user_line << group.name
         if user.schedule
           user.schedule.days.each do |day|

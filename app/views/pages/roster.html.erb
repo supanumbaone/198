@@ -1,7 +1,7 @@
 <table>
 	<tr>
-		<th>Last Name</th>
-		<th>First Name</th>
+		<th>Last</th>
+		<th>First</th>
 		<th>Email</th>
 		<th>Group</th>
 		<th></th>
@@ -55,8 +55,12 @@
 	</tr>
 	<% @users.each do |user| %>
 		<tr>
-			<% user.each do |attribute| %>
-				<td><%= attribute %></td>
+			<% if user %>
+				<% user.each do |attribute| %>
+					<td><%= attribute %></td>
+				<% end %>
+			<% else %>
+				<td></td>
 			<% end %>
 		</tr>
 	<% end %>

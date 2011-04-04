@@ -12,6 +12,7 @@ Grooopme::Application.routes.draw do
   match "/waiting_for_confirmation" => "pages#waiting_for_confirmation", :as => "waiting_for_confirmation"
   match "/download" => "users#download", :as => "download"
   match "/stats" => "pages#stats", :as => "stats"
+  match "/roster" => "pages#roster", :as => "roster"
   
   #Comments
   #=======================#
