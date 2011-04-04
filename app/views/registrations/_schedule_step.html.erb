@@ -15,7 +15,10 @@
 		<%= render "conventional_simple_schedule", :f => f %>
 	<% end %>
 
-	<p id="form_button"><%= f.submit "Continue", :class => "orange_button" %> or <%= f.submit "Back", :name => "back_button", :class => "back_button" %></p>
-	
-	<%= hidden_field_tag 'resource', @resource %>
+	<% if current_user.signup_status == 'completed' %>
+		<p id="form_button"><%= f.submit "Update", :class => "orange_button" %>
+	<% else %>
+		<p id="form_button"><%= f.submit "Continue", :class => "orange_button" %> or <%= f.submit "Back", :name => "back_button", :class => "back_button" %></p>
+		<%= hidden_field_tag 'resource', @resource %>
+	<% end %>
 <% end %>

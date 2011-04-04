@@ -48,13 +48,13 @@ class TimeBlocksController < ApplicationController
           if @schedule_type == 'simple'
             @user.add_date_chunks_to_schedule(@blocks, @schedule)
           elsif @schedule_type == 'conventional_simple'
-            @user.add_day_chunks_to_schedule(@blocks, @schedule)
+            @user.add_day_chunks_to_schedule(@blocks, @schedule, @user)
           elsif @schedule_type == 'complex_recurring'
             @user.add_blocks_to_schedule(@blocks, @schedule, true)
           end
           @user.save
           # redirect_to root_path, :notice => "You're all signed up! Check out who's available.."
-          redirect_to signed_up_path
+          redirect_to root_path
         else
           flash[:error] = "You must have at least one small chunk of time free this week :)"
           redirect_to signup_wizard_path(:step => '3', :resource => params['resource'])
