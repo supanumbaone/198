@@ -24,4 +24,10 @@ class PagesController < ApplicationController
       false
     end
   end
+  
+  def stats
+    @users = User.all
+    @users_count = @users.count
+    @unregistered_users = User.get_unregistered_users
+  end
 end

@@ -1,0 +1,15 @@
+<ul id="stats">
+	<li><strong>Students Signed Up:</strong> <%= @users_count %></li>
+	<li><strong>Students Not Signed Up:</strong> <%= @unregistered_users.count %></li>
+</ul>
+
+<ul id="unregistered">
+	<h3>Emails of Unregistered Students</h3>
+	<% if !@unregistered_users.blank? %>
+	  <% for user in @unregistered_users %>
+	    <li><%= user %></li>
+	  <% end %>
+	<% else %>
+	  Everybody has registered.
+	<% end %>
+</ul>
