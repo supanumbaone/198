@@ -49,6 +49,9 @@ class Group < ActiveRecord::Base
             end
           end
           user_line << user.parse_preferred_teammates
+          user_line << user.discussion_section_1
+          user_line << user.discussion_section_2
+          user_line << user.discussion_section_3
         end
         export_users << user_line
       end
