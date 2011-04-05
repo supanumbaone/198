@@ -329,7 +329,7 @@ class User < ActiveRecord::Base
 
     for student in roster
       email = student.split("\t").last
-      student.replace(email)
+      student.replace(email.downcase)
     end
     
     roster = roster.sort
