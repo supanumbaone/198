@@ -32,13 +32,13 @@ class UsersController < ApplicationController
     # Content-Disposition options:
     #   attachment = stream download
     #   inline = display contents of download in browser
-    # response.headers['Content-Type'] = "text/plain"
-    # response.headers['Content-Disposition'] = "attachment; filename=user_list_#{Time.now.strftime("%m.%d.%Y")}.txt"
-    # response.headers['X-Accel-Redirect'] = "/public/exports/" + file_name
-    # render :nothing => true
+    response.headers['Content-Type'] = "text/plain"
+    response.headers['Content-Disposition'] = "attachment; filename=user_list_#{Time.now.strftime("%m.%d.%Y")}.txt"
+    response.headers['X-Accel-Redirect'] = "/public/exports/" + file_name
+    render :nothing => true
     
     # User send_file when running app locally
-    send_file "#{export_path}", :type => "text/plain"
+    # send_file "#{export_path}", :type => "text/plain"
   end
   
   # render_to_string() requires there to be an :action parameter
