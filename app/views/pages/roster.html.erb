@@ -68,7 +68,9 @@
 	</table>
 </div>
 
-<div>
-	<%= link_to "download users", download_path(:export_type => "user") %>
-	<%= link_to "download schedule", download_path(:export_type => "schedule") %>
-</div>
+<% if user_signed_in? && current_user.admin %>
+	<div>
+		<%= link_to "download users", download_path(:export_type => "user") %>
+		<%= link_to "download schedule", download_path(:export_type => "schedule") %>
+	</div>
+<% end %>

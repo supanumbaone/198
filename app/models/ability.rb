@@ -3,6 +3,10 @@ class Ability
 
   def initialize(user)
     user ||= User.new  # guest user
+    
+    if user.admin
+      can :manage, :all
+    end
   
     if !user.email.blank?
       can :read, @registration
