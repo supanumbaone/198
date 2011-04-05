@@ -59,7 +59,7 @@ class User < ActiveRecord::Base
     if self.preferred_teammates && self.preferred_teammates != ""
       friends = self.preferred_teammates.split("\r\n")      
       for f in friends
-          emails << f.split("<").last.strip.chop unless f.blank?
+          emails << f.split("<").last.strip.chop unless (f.blank? || f.split("<").last.blank?)
       end
       for e in emails.sort
         list += e + ", "
@@ -245,7 +245,6 @@ class User < ActiveRecord::Base
     Ing, David Alexander	ding@ucsd.edu
     Jauregui, Joel	jjauregui@ucsd.edu
     Kalra, Mahir Singh	mskalra@ucsd.edu
-    Kim, Jung	juk018@ucsd.edu
     Kimura, Kayla Marie	kmkimura@ucsd.edu
     Kou, Bryant Jonathan	bkou@ucsd.edu
     Lam, Dao Dinh	d2lam@ucsd.edu
@@ -299,7 +298,6 @@ class User < ActiveRecord::Base
     Sorokina, Olga	osorokin@ucsd.edu
     Sun, Carla Emile	cesun@ucsd.edu
     Ta, Minh Q	mqta@ucsd.edu
-    Taberner, Michael Francis	mtaberne@ucsd.edu
     Tanaka, Sheldon Ryan	srtanaka@ucsd.edu
     Tao, Edwin	etao@ucsd.edu
     Tao, Feiran	ftao@ucsd.edu
@@ -324,7 +322,6 @@ class User < ActiveRecord::Base
     Young, Benjamin Gee	byoung@ucsd.edu
     Zhang, Kevin W	k7zhang@ucsd.edu
     Zhou, Franklin Yuqing	fyzhou@ucsd.edu
-    Arora, Tarin Something	tarora@ucsd.edu
     Colmenar, Al Something	acolmena@ucsd.edu
     Avery, Christopher Something	sirusto@gmail.com"    
 

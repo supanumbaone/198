@@ -30,7 +30,6 @@ $(document).ready(function() {
 	
 	$(function() {
 			var availableNames = [
-				"Tarin Arora <tarora@ucsd.edu>",
 				"Christopher Avery <sirusto@gmail.com>",
 				"Al Colmenar <acolmena@ucsd.edu",
 				"Elioth Artur Almada <ealmada@ucsd.edu>",
@@ -78,7 +77,6 @@ $(document).ready(function() {
 				"David Alexande Ing <ding@ucsd.edu>",
 				"Joe Jauregui <jjauregu@ucsd.edu>",
 				"Mahir Sing Kalra <mskalra@ucsd.edu>",
-				"Jun Kim <juk018@ucsd.edu>",
 				"Kayla Mari Kimura <kmkimura@ucsd.edu>",
 				"Bryant Jonatha Kou <bkou@ucsd.edu>",
 				"Dao Din Lam <d2lam@ucsd.edu>",
@@ -132,7 +130,6 @@ $(document).ready(function() {
 				"Olg Sorokina <osorokin@ucsd.edu>",
 				"Carla Emil Sun <cesun@ucsd.edu>",
 				"Minh  Ta <mqta@ucsd.edu>",
-				"Michael Franci Taberner <mtaberne@ucsd.edu>",
 				"Sheldon Rya Tanaka <srtanaka@ucsd.edu>",
 				"Edwi Tao <etao@ucsd.edu>",
 				"Feira Tao <ftao@ucsd.edu>",
