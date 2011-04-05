@@ -57,7 +57,7 @@ class User < ActiveRecord::Base
     list = ""
     if self.preferred_teammates && self.preferred_teammates != ""
       friends = self.preferred_teammates.split("\r\n")
-      friends.each do |friend|
+      friends.sort.each do |friend|
         list += "#{friend.split("<")[1].split(">")[0]}," if friend && friend.split("<")[1]
       end
       list = list[0..(list.size-2)]
