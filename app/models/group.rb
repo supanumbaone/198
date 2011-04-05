@@ -48,6 +48,7 @@ class Group < ActiveRecord::Base
               user_line << u_block
             end
           end
+          user_line << user.parse_preferred_teammates
         end
         export_users << user_line
       end
