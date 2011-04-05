@@ -16,6 +16,7 @@ class PagesController < ApplicationController
   
   def roster
     @users = Group.export
+    render :layout => "stretched"
   end
   
   def finished_signup
