@@ -53,10 +53,10 @@ class User < ActiveRecord::Base
   end
 
   # Name <email>  =>  email
-  def parse_preferred_friends
+  def parse_preferred_teammates
     list = ""
-    if self.preferred_friends
-      friends = self.preferred_friends.split("\r\n").collect{ |s| s.to_i }
+    if self.preferred_teammates
+      friends = self.preferred_teammates.split("\r\n").collect{ |s| s.to_i }
       friends.each do |friend|
         list += "#{friend.split("<")[1].split(">")[0]},"
       end
@@ -148,7 +148,7 @@ class User < ActiveRecord::Base
     users_to_be_exported = []
     
     users.each do |user|
-      temp = "#{user.email},#{user.discussion_section_1},#{user.discussion_section_2},#{user.discussion_section_3}:#{user.parse_preferred_friends}:".gsub(/\s/,"")
+      temp = "#{user.email},#{user.discussion_section_1},#{user.discussion_section_2},#{user.discussion_section_3}:#{user.parse_preferred_teammates}:".gsub(/\s/,"")
       if user.schedule
         user.schedule.days.each do |day|
           day.time_blocks.each do |block|
