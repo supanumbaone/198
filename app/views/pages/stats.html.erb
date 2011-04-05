@@ -1,9 +1,23 @@
 <ul id="stats">
-	<li><strong>Students Signed Up:</strong> <%= @users_count %></li>
+	<li><strong>Students Signed Up and Form Completed:</strong> <%= @users_count %></li>
+	<li><strong>Students signed up but haven't completed form:</strong><%= @limbo_count %></li>
 	<li><strong>Students Not Signed Up:</strong> <%= @unregistered_users.count %></li>
 </ul>
 
+
+
 <ul id="unregistered">
+	<h3>Emails of Registered but Unfinished Students</h3>
+	<% if !@limbo_users.blank? %>
+	  <% for user in @limbo_users %>
+	    <li><%= user.email %></li>
+	  <% end %>
+	<% else %>
+	  All users who have signed up have completed filling out the form.
+	<% end %>
+	
+	
+	
 	<h3>Emails of Unregistered Students</h3>
 	<% if !@unregistered_users.blank? %>
 	  <% for user in @unregistered_users %>

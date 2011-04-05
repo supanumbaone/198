@@ -29,8 +29,10 @@ class PagesController < ApplicationController
   end
   
   def stats
-    @users = User.all
+    @users = User.where(:signup_status => "completed")
     @users_count = @users.count
+    @limbo_users = User.where("Signup_status != ?", "completed")
+    @limbo_count = @limbo_users.count
     @unregistered_users = User.get_unregistered_users
   end
 end
