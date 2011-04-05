@@ -239,7 +239,7 @@ class User < ActiveRecord::Base
     Hoffman, Thomas Dan	thoffman@ucsd.edu
     Holloway, William Jordan	wjhollow@ucsd.edu
     Ing, David Alexander	ding@ucsd.edu
-    Jauregui, Joel	jjauregu@ucsd.edu
+    Jauregui, Joel	jjauregui@ucsd.edu
     Kalra, Mahir Singh	mskalra@ucsd.edu
     Kim, Jung	juk018@ucsd.edu
     Kimura, Kayla Marie	kmkimura@ucsd.edu
@@ -329,7 +329,7 @@ class User < ActiveRecord::Base
 
     for student in roster
       email = student.split("\t").last
-      student.replace(email.downcase)
+      student.replace(email.strip.downcase)
     end
     
     roster = roster.sort
@@ -343,7 +343,7 @@ class User < ActiveRecord::Base
     full_roster = get_class_roster
     users = User.all
     for u in users
-      registered_emails << u.email
+      registered_emails << u.email.strip.downcase
     end
     
     unregistered_emails = full_roster - registered_emails
