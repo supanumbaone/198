@@ -55,16 +55,20 @@ class User < ActiveRecord::Base
   # Name <email>  =>  email
   def parse_preferred_teammates
     list = ""
+    emails = Array.new
     if self.preferred_teammates && self.preferred_teammates != ""
-      friends = self.preferred_teammates.split("\r\n")
-      friends.sort.each do |friend|
-        list += "#{friend.split("<")[1].split(">")[0]}," if friend && friend.split("<")[1]
+      friends = self.preferred_teammates.split("\r\n")      
+      for f in friends
+          emails << f.split("<").last.strip.chop unless f.blank?
       end
-      list = list[0..(list.size-2)]
+      for e in emails.sort
+        list += e + ", "
+      end
     end
-    
-    list
+    return list.rstrip.chop
   end
+  
+  
   
   # Does the user have a group?
   # def has_group?
