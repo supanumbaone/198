@@ -55,8 +55,8 @@ class User < ActiveRecord::Base
   # Name <email>  =>  email
   def parse_preferred_teammates
     list = ""
-    if self.preferred_teammates
-      friends = self.preferred_teammates.split("\r\n").collect{ |s| s.to_i }
+    if self.preferred_teammates != ""
+      friends = self.preferred_teammates.split("\r\n")
       friends.each do |friend|
         list += "#{friend.split("<")[1].split(">")[0]},"
       end
