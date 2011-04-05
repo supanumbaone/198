@@ -1,67 +1,74 @@
-<table>
-	<tr>
-		<th>Last</th>
-		<th>First</th>
-		<th>Email</th>
-		<th>Group</th>
-		<th></th>
-		<th>M</th>
-		<th></th>
-		<th></th>
-		<th>T</th>
-		<th></th>
-		<th></th>
-		<th>W</th>
-		<th></th>
-		<th></th>
-		<th>Th</th>
-		<th></th>
-		<th></th>
-		<th>F</th>
-		<th></th>
-		<th></th>
-		<th>S</th>
-		<th></th>
-		<th></th>
-		<th>Su</th>
-		<th></th>
-	</tr>
-	<tr>
-		<th></th>
-		<th></th>
-		<th></th>
-		<th></th>
-		<th>am</th>
-		<th>noon</th>
-		<th>pm</th>
-		<th>am</th>
-		<th>noon</th>
-		<th>pm</th>
-		<th>am</th>
-		<th>noon</th>
-		<th>pm</th>
-		<th>am</th>
-		<th>noon</th>
-		<th>pm</th>
-		<th>am</th>
-		<th>noon</th>
-		<th>pm</th>
-		<th>am</th>
-		<th>noon</th>
-		<th>pm</th>
-		<th>am</th>
-		<th>noon</th>
-		<th>pm</th>
-	</tr>
-	<% @users.each do |user| %>
+<div style="overflow:scroll;height:500px">
+	<table>
 		<tr>
-			<% if user %>
-				<% user.each do |attribute| %>
-					<td><%= attribute %></td>
-				<% end %>
-			<% else %>
-				<td></td>
-			<% end %>
+			<th>Last</th>
+			<th>First</th>
+			<th>Email</th>
+			<th>Group</th>
+			<th></th>
+			<th>M</th>
+			<th></th>
+			<th></th>
+			<th>T</th>
+			<th></th>
+			<th></th>
+			<th>W</th>
+			<th></th>
+			<th></th>
+			<th>Th</th>
+			<th></th>
+			<th></th>
+			<th>F</th>
+			<th></th>
+			<th></th>
+			<th>S</th>
+			<th></th>
+			<th></th>
+			<th>Su</th>
+			<th></th>
 		</tr>
-	<% end %>
-</table>
+		<tr>
+			<th></th>
+			<th></th>
+			<th></th>
+			<th></th>
+			<th>am</th>
+			<th>noon</th>
+			<th>pm</th>
+			<th>am</th>
+			<th>noon</th>
+			<th>pm</th>
+			<th>am</th>
+			<th>noon</th>
+			<th>pm</th>
+			<th>am</th>
+			<th>noon</th>
+			<th>pm</th>
+			<th>am</th>
+			<th>noon</th>
+			<th>pm</th>
+			<th>am</th>
+			<th>noon</th>
+			<th>pm</th>
+			<th>am</th>
+			<th>noon</th>
+			<th>pm</th>
+		</tr>
+		<% @users.each do |user| %>
+			<tr>
+				<% if user %>
+					<% user.each do |attribute| %>
+						<td><%= attribute %></td>
+					<% end %>
+				<% else %>
+					<td></td>
+				<% end %>
+			</tr>
+		<% end %>
+	</table>
+</div>
+
+<div>
+	<%= link_to "download users", download_path(:export_type => "user") %>
+	<%= link_to "download schedule", download_path(:export_type => "schedule") %>
+</div>
