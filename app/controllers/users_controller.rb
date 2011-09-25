@@ -45,4 +45,9 @@ class UsersController < ApplicationController
   # this is that parameter
   def export_object
   end
+  
+  def group_users
+    Group.group_users
+    redirect_to roster_path
+  end
 end

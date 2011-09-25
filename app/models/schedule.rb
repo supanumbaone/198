@@ -1,8 +1,9 @@
 class Schedule < ActiveRecord::Base
   has_many :days, :dependent => :destroy
   belongs_to :user
+  belongs_to :group
   
-  attr_accessible :name, :description, :user_id
+  attr_accessible :name, :description, :user_id, :group_id
   
   def self.export_object
     users = User.all

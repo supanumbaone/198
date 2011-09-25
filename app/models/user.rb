@@ -18,7 +18,8 @@ class User < ActiveRecord::Base
                   :birthday, :about, :location, :school, :occupation, :aim, :live, :skype, 
                   :gtalk, :phone, :hide_email, :hide_phone, :hide_ims, :birthday_privacy, :signup_status,
                   :interest_list, :profile_image, :personal_information_added, :discussion_section_1,
-                  :discussion_section_2, :discussion_section_3, :preferred_teammates, :html, :css, :javascript, :java, :cpp, :python, :ruby_ror, :other, :sql
+                  :discussion_section_2, :discussion_section_3, :preferred_teammates, :html, :css, :javascript, 
+                  :java, :cpp, :python, :ruby_ror, :other, :sql
   
   # Keeps track of the signup step
   attr_accessor :current_step
@@ -51,6 +52,23 @@ class User < ActiveRecord::Base
   def has_schedule?
     self.schedule != nil
   end
+  
+  # return self's preferred_teammates that are not already in a group
+  def preferred_available_teammates
+    # self.parse_preferred_teammates
+    teammates = self.preferred_teammates.split(",")
+    teammates.each do |teammate|
+      user = User.where(:email => teammate).first
+      if user
+        if !user.groups.empty?
+          teammates.delete(teammate)
+        end
+      else
+        teammates.delete(teammate)
+      end
+    end
+    teammates
+  end
 
   # Name <email>  =>  email
   def parse_preferred_teammates
@@ -62,13 +80,46 @@ class User < ActiveRecord::Base
           emails << f.split("<").last.strip.chop unless (f.blank? || f.split("<").last.blank?)
       end
       for e in emails.sort
-        list += e + ", "
+        list += e + ","
       end
     end
-    return list.rstrip.chop
+    self.preferred_teammates = list.rstrip.chop
+    self.save
+    
+    self.preferred_teammates
   end
   
-  
+  def number_of_compatible_time_blocks_with(schedule)
+    compatibilities = 0
+    
+    # does user have a schedule
+    if self.schedule != nil
+      self_days = self.schedule.days
+      schedule_days = schedule.days
+    
+      # does user have days in schedule
+      if self_days != nil
+        self_days.each do |self_day|
+          schedule_days.each do |schedule_day|
+            if self_day.name == schedule_day.name
+              # does user have time_blocks in day
+              if self_day.time_blocks != nil
+                self_day.time_blocks.each do |self_block|
+                  schedule_day.time_blocks.each do |schedule_block|
+                    if self_block.chunk_of_time == schedule_block.chunk_of_time
+                      compatibilities += 1
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+    
+    compatibilities
+  end
   
   # Does the user have a group?
   # def has_group?
@@ -152,7 +203,8 @@ class User < ActiveRecord::Base
     users_to_be_exported = []
     
     users.each do |user|
-      temp = "#{user.email},#{user.discussion_section_1},#{user.discussion_section_2},#{user.discussion_section_3}:#{user.parse_preferred_teammates}:".gsub(/\s/,"")
+      # temp = "#{user.email},#{user.discussion_section_1},#{user.discussion_section_2},#{user.discussion_section_3}:#{user.parse_preferred_teammates}:".gsub(/\s/,"")
+      temp = "#{user.email},#{user.discussion_section_1},#{user.discussion_section_2},#{user.discussion_section_3}:#{user.preferred_teammates}:".gsub(/\s/,"")
       if user.schedule
         user.schedule.days.each do |day|
           day.time_blocks.each do |block|
@@ -372,4 +424,18 @@ class User < ActiveRecord::Base
       end
     end
   end
+  
+  # def self.get_friends(user, group_size, max_size)
+    # friends = user.preferred_teammates.split(",")
+    # if !friends.blank?
+      # while f < friends.length && group_size < max_size
+        # friend = User.where(:email => friends[f])
+        # if friend && friend.groups.blank?
+          
+        # end
+        
+        # f += 1
+      # end
+    # end
+  # end
 end

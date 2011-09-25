@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110404045459) do
+ActiveRecord::Schema.define(:version => 20110924184529) do
 
   create_table "comments", :force => true do |t|
     t.integer  "commentable_id",   :default => 0
@@ -50,6 +50,9 @@ ActiveRecord::Schema.define(:version => 20110404045459) do
     t.datetime "updated_at"
     t.integer  "creator"
     t.string   "profile_image"
+    t.integer  "discussion_section_1", :default => 3
+    t.integer  "discussion_section_2", :default => 3
+    t.integer  "discussion_section_3", :default => 3
   end
 
   create_table "memberships", :force => true do |t|
@@ -57,6 +60,7 @@ ActiveRecord::Schema.define(:version => 20110404045459) do
     t.integer  "group_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "compatibility_score", :default => 0
   end
 
   create_table "schedules", :force => true do |t|
@@ -65,6 +69,7 @@ ActiveRecord::Schema.define(:version => 20110404045459) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "group_id"
   end
 
   create_table "taggings", :force => true do |t|
