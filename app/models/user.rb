@@ -89,21 +89,110 @@ class User < ActiveRecord::Base
     self.preferred_teammates
   end
   
+  # Returns the user that could be a compatible teammate with the highest
+  # number of ungrouped users
+  def self.most_compatible_ungrouped_user
+    ungrouped_users = []
+    users = User.all
+    
+    users.each do |user|
+      ungrouped_users << user if user.groups.empty?
+    end
+    
+    # sorts ungrouped_users by leader_score, highest -> lowest
+    ungrouped_users.sort! { |b,a| a.leader_score <=> b.leader_score }
+    
+    ungrouped_users.first
+  end
+  
+  # Each ungrouped user is given a leader score to determine how strong a group could
+  # be built around him
+  # 
+  # Leader score = (SUM OF (2 * each compatible meeting time with each ungrouped user)) 
+  #               + (all compatible time blocks with all ungrouped users)
+  def leader_score
+    score = 0
+    ungrouped_users = []
+    users = User.all
+    
+    users.each do |user|
+      ungrouped_users << user if user.groups.empty?
+    end
+    
+    ungrouped_users.each do |ungrouped_user|
+      if self.has_compatible_meeting_time_with(ungrouped_user)
+        score += (self.number_of_compatible_meeting_times_with(ungrouped_user) * 2) + self.number_of_compatible_time_blocks_with(ungrouped_user.schedule)
+      end
+    end
+    
+    score
+  end
+  
+  # Returns the number of ungrouped users that the current user is compatible with
+  # 
+  # Compatibility:
+  #   1. both users have 1+ meeting times in common (ie: discussion_section_1)
+  #   2. both users have 1+ time blocks in common
+  def potential_teammate_count
+    potential_teammate_count = 0
+    ungrouped_users = []
+    users = User.all
+    
+    users.each do |user|
+      ungrouped_users << user if user.groups.empty?
+    end
+    
+    ungrouped_users.each do |ungrouped_user|
+      if self.has_compatible_meeting_time_with(ungrouped_user) and self.number_of_compatible_time_blocks_with(ungrouped_user.schedule) > 0
+        potential_teammate_count += 1
+      end
+    end
+    
+    potential_teammate_count
+  end
+  
+  # Returns true if self and <tt>user</tt> have at least one monday availability 
+  # in common
+  def has_compatible_meeting_time_with(user)
+    if self.number_of_compatible_meeting_times_with(user) > 0
+      return true
+    end
+    
+    return false
+  end
+  
+  # Returns the number of compatible meeting times between self and <tt>user</tt>
+  def number_of_compatible_meeting_times_with(user)
+    compatibilities = 0
+    
+    if (self.discussion_section_1 != 0) and (user.discussion_section_1 != 0)
+      compatibilities += 1
+    elsif (self.discussion_section_2 != 0) and (user.discussion_section_2 != 0)
+      compatibilities += 1
+    elsif (self.discussion_section_3 != 0) and (user.discussion_section_3 != 0)
+      compatibilities += 1
+    end
+    
+    compatibilities
+  end
+  
+  # Returns the number of compatible time blocks between user's schedule and 
+  # <tt>schedule</tt>
   def number_of_compatible_time_blocks_with(schedule)
     compatibilities = 0
     
-    # does user have a schedule
-    if self.schedule != nil
+    # does user have a schedule and does <tt>schedule</tt> exist
+    if self.schedule != nil and schedule != nil
       self_days = self.schedule.days
       schedule_days = schedule.days
     
-      # does user have days in schedule
-      if self_days != nil
+      # are there days in each schedule
+      if self_days != nil and schedule_days != nil
         self_days.each do |self_day|
           schedule_days.each do |schedule_day|
             if self_day.name == schedule_day.name
-              # does user have time_blocks in day
-              if self_day.time_blocks != nil
+              # are there time blocks in each day
+              if self_day.time_blocks != nil and schedule_day.time_blocks != nil
                 self_day.time_blocks.each do |self_block|
                   schedule_day.time_blocks.each do |schedule_block|
                     if self_block.chunk_of_time == schedule_block.chunk_of_time
@@ -120,11 +209,6 @@ class User < ActiveRecord::Base
     
     compatibilities
   end
-  
-  # Does the user have a group?
-  # def has_group?
-    
-  # end
   
   # Given a schedule, create days with dates
   # Where a chunk_of_time is "morning" | "afternoon" | "evening"

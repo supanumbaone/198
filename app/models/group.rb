@@ -24,6 +24,11 @@ class Group < ActiveRecord::Base
     self.friend_score + self.meeting_score + self.schedule_score
   end
   
+  # how large groups can get
+  def self.max_group_size
+    8
+  end
+  
   def self.export
     groups = Group.all
     days = %w(Monday Tuesday Wednesday Thursday Friday Saturday Sunday)
@@ -67,6 +72,13 @@ class Group < ActiveRecord::Base
     export_users
   end
   
+  # Priority for grouping users:
+  #   1. Compatibility
+  #   2. Friends
+  #   3. Schedule
+  # 
+  # Compatibility:
+  #   User has 1+ meeting times (discussion_section_x's) in common with group
   def self.group_users
     clean_up_groups
     group_by_friends
@@ -74,6 +86,7 @@ class Group < ActiveRecord::Base
     group_ungrouped_users
   end
   
+  # Destroys all groups and memberships
   def self.clean_up_groups
     memberships = Membership.all
     groups = Group.all
@@ -87,16 +100,22 @@ class Group < ActiveRecord::Base
     end
   end
   
+  # Creates groups and throws users with preferred teammates into them
+  # 
+  # User is grouped with all preferred teammates with two constraints:
+  #   1. Preferred teammates are all compatible
+  #   2. All preferred teammates can fit into the group given Group.max_group_size
+  # 
+  # Compatibility:
+  #   User has 1+ meeting times (discussion_section_x's) in common with group
   def self.group_by_friends
-    ungrouped_users = []
+    max_group_size = 8  # how large groups can get
     users_with_preferred_teammates = []
     users = User.all
     
-    # construct list of users not in a group
     # construct a list of users with preferred taemmates
-    users.each do |u|
-      ungrouped_users << u.email
-      users_with_preferred_teammates << u.email if !u.preferred_teammates.blank?
+    users.each do |user|
+      users_with_preferred_teammates << user.email if !user.preferred_teammates.blank?
     end
     
     # find a group for each user and his preferred_teammates
@@ -106,27 +125,30 @@ class Group < ActiveRecord::Base
       # user.parse_preferred_teammates
       find_group_for(user)
       group = user.groups.first
-      ungrouped_users.delete(user.email)
       users_with_preferred_teammates.delete(user.email)
       preferred_teammates = user.preferred_available_teammates
       preferred_teammates.each do |teammate|
         preferred_teammate = User.where(:email => teammate).first
-        if preferred_teammate and group.has_compatible_meeting_time_with(user)
-          add_to_group(preferred_teammate, group, "friend")
+        
+        # preferred teammates can only join if they have a compatible meeting time with the group
+        if preferred_teammate and group.has_compatible_meeting_time_with(user) and group.users.count < max_group_size
+          group.add_user(preferred_teammate, "friend")
         end
+        
         # teammate should be deleted from lists regardless of if grouped or not
-        # for sake of loop continuing
+        # for sake of avoiding an infinite loop
         # ungrouped users will be dealt with later
-        ungrouped_users.delete(teammate)
         users_with_preferred_teammates.delete(teammate)
       end
     end
-    
-    # MAY WANT TO DELETE - ungrouped_users isn't really needed
-    # return list of users that still need to be grouped
-    ungrouped_users
   end
   
+  # Fits user into an existing group
+  # Group must have space for user and all user's preferred teammates
+  # User must be compatible with group
+  # 
+  # Compatibility:
+  #   User has 1+ meeting times (discussion_section_x's) in common with group
   def self.find_group_for(user)
     max_group_size = 8  # how large groups can get
     groups = Group.all
@@ -135,7 +157,7 @@ class Group < ActiveRecord::Base
     if groups.empty?
       group = Group.new(:name => "group_1", :creator => user.id)
       group.save
-      add_to_group(user, group, "creator")
+      group.add_user(user, "creator")
     # else fit the user and his preferred teammates into an existing group
     else
       groups.each do |group|
@@ -146,62 +168,83 @@ class Group < ActiveRecord::Base
           # if group has enough spots for current user and all his preferred teammates
           if available_spots >= spots_required
             # if at least 1 of user's monday availabilities mach up with the group's
-            if group.has_compatible_meeting_time_with(user)
-              add_to_group(user, group, "meeting") # may want to change BACK to friend..
+            if user.groups.empty? and group.has_compatible_meeting_time_with(user)
+              group.add_user(user, "meeting") # may want to change BACK to friend..
             end
           end
         end
       end
     end
     
-    # if the user couldn't be fit into an existing group, create a new one
+    # if the user and his preferred teammates couldn't be fit into an existing 
+    # group, create a new one
     if user.groups.empty?
       create_and_join_group(user)
     end
   end
   
+  # Creates a new group with user as creator
+  # Adds user to group
   def self.create_and_join_group(user)
     group = Group.create(:name => "group_#{Group.all.count + 1}", :creator => user.id)
-    add_to_group(user, group, "creator")
+    group.add_user(user, "creator")
   end
   
-  def self.add_to_group(user, group, reason)
+  # Determines a compatibility score between user and group, then creates membership
+  # Membership also stores the compatibility score
+  def add_user(user, reason)
     compatibility_score = 0
+    group_leader = User.find(self.creator)
     
+    # compatibility should be checked against the group schedule
+    # but
+    # compatibility score should be in respect to group leader's schedule
+    # as to not shaft members that join later
     case reason
     when "creator"
       compatibility_score += 42
       
-      group.initialize_group_meeting_times(user)
-      group.initialize_group_schedule(user.schedule)  # leader must have a schedule..
+      self.initialize_group_meeting_times(user)
+      self.initialize_group_schedule(user.schedule)  # leader must have a schedule..
     when "friend"
       compatibility_score += 21
-      compatibility_score += user.number_of_compatible_time_blocks_with(group.schedule)
+      compatibility_score += user.number_of_compatible_time_blocks_with(group_leader.schedule)
       
+      # initializing <tt>group</tt> because of something funky going on with <tt>self</tt> in this context
+      group = Group.where(:creator => self.creator).first
       group.update_group_meeting_times(user)
       group.update_group_schedule(user.schedule) if user.schedule != nil
     else
-      compatibility_score += user.number_of_compatible_time_blocks_with(group.schedule)
+      compatibility_score += user.number_of_compatible_time_blocks_with(group_leader.schedule)
       
+      # initializing <tt>group</tt> because of something funky going on with <tt>self</tt> in this context
+      group = Group.where(:creator => self.creator).first
       group.update_group_meeting_times(user)
       group.update_group_schedule(user.schedule) if user.schedule != nil
     end
     
-    Membership.create(:group_id => group.id, :user_id => user.id, :compatibility_score => compatibility_score)
+    Membership.create(:group_id => self.id, :user_id => user.id, :compatibility_score => compatibility_score)
   end
   
+  # Group meeting times = intersection of all user's meeting preferences
+  # Really we only care about 0's (aka, the meeting time is not an option)
   def update_group_meeting_times(user)
-    if (self.discussion_section_1 > user.discussion_section_1)
+    if self.discussion_section_1 > user.discussion_section_1
       self.discussion_section_1 = user.discussion_section_1
+      self.save
     end
-    if (self.discussion_section_2 > user.discussion_section_2)
+    if self.discussion_section_2 > user.discussion_section_2
+      # logger.debug "kMEMBER discussion_section_2: #{user.email} #{user.discussion_section_2} | #{self.discussion_section_2}"
       self.discussion_section_2 = user.discussion_section_2
+      self.save
     end
-    if (self.discussion_section_3 > user.discussion_section_3)
+    if self.discussion_section_3 > user.discussion_section_3
       self.discussion_section_3 = user.discussion_section_3
+      self.save
     end
   end
   
+  # Group schedule = intersection of group schedule and <tt>schedule</tt>
   def update_group_schedule(schedule)
     self_days = self.schedule.days
     schedule_days = schedule.days
@@ -209,36 +252,38 @@ class Group < ActiveRecord::Base
     self_days.each do |self_day|
       day_in_common = false
       schedule_days.each do |schedule_day|
+        # if group's schedule and <tt>schedule</tt> both contain the same day
         if self_day.name == schedule_day.name
-          day_in_common = true
           self_day.time_blocks.each do |self_block|
             time_block_in_common = false
             schedule_day.time_blocks.each do |schedule_block|
+              # if group's schedule and <tt>schedule</tt> both contain the same time_block
               if self_block.chunk_of_time == schedule_block.chunk_of_time
-                time_block_in_common = true
+                # flag the day to not be deleted from group's schedule
+                # only want to keep the day if there is a time_block in common in that day
+                day_in_common = true
+                time_block_in_common = true # flag the time_block to not be deleted from group's schedule
               end
             end
-            if !time_block_in_common
-              block = TimeBlock.where(:id => self_block.id).first
-              block.destroy if block != nil
-            end
+             # remove time_block from group's schedule if <tt>schedule</tt> does not have day
+            self_block.destroy if !time_block_in_common
           end
         end
       end
-      if !day_in_common
-        day = Day.where(:id => self_day.id).first
-        # logger.debug "NIL DAY: #{self_day.id}"
-        day.destroy if day != nil
-      end
+      # remove day from group's schedule if <tt>schedule</tt> does not have day
+      self_day.destroy if !day_in_common
     end
   end
   
+  # Sets group meetings times to reflect the group leader's meeting preferences
   def initialize_group_meeting_times(creator)
     self.discussion_section_1 = creator.discussion_section_1
     self.discussion_section_2 = creator.discussion_section_2
     self.discussion_section_3 = creator.discussion_section_3
+    self.save
   end
   
+  # Creates a group schedule mirroring the group leader's schedule
   def initialize_group_schedule(creator_schedule)
     # clear current schedule if one exists
     self.schedule.destroy if self.schedule != nil
@@ -255,6 +300,8 @@ class Group < ActiveRecord::Base
     end
   end
   
+  # Resets group meeting times to that of the group leader's
+  # Changes group meeting times to reflect the whole group
   def reset_meeting_times
     leader = User.where(:id => self.creator).first
     self.initialize_group_meeting_times(leader)
@@ -263,6 +310,8 @@ class Group < ActiveRecord::Base
     end
   end
   
+  # Destroys current group schedule
+  # Re-creates schedule
   def reset_schedule
     leader = User.where(:id => self.creator).first
     self.initialize_group_schedule(leader.schedule)
@@ -271,7 +320,7 @@ class Group < ActiveRecord::Base
     end
   end
   
-  # return true if self and user have at least one monday availability in common
+  # Returns true if group and user have 1+ monday availabilities in common
   def has_compatible_meeting_time_with(user)
     if (self.discussion_section_1 != 0) and (user.discussion_section_1 != 0)
       return true
@@ -279,85 +328,145 @@ class Group < ActiveRecord::Base
       return true
     elsif (self.discussion_section_3 != 0) and (user.discussion_section_3 != 0)
       return true
-    else
-      return false
+    end
+      
+    return false
+  end
+  
+  # 1. Fills up groups created by group_by_friends
+  # 2. Continues to create and fill groups as long as there are <tt>smallest_group_size</tt>
+  #    or more ungrouped, compatible users at the point of group creation
+  # 
+  # Compatibility:
+  #   1. Set of users have 1+ meeting times (discussion_section_x's) in common
+  #   2. Set of users have 1+ time blocks in common WITH GROUP LEADER
+  #     a. This will be changed if friend grouping does not take priority over the group
+  #        having 1+ time blocks in common
+  def self.group_by_time_blocks
+    # throw most compatible ungrouped users into the existings friend-based
+    # groups
+    fill_up_groups
+    
+    # smallest group size allowed for the last group created
+    smallest_permitted_group_size = Group.max_group_size - 3
+    number_of_potential_teammates = User.most_compatible_ungrouped_user.potential_teammate_count
+    
+    while number_of_potential_teammates > smallest_permitted_group_size
+      logger.debug "most_compatible_ungrouped_user | score: #{User.most_compatible_ungrouped_user.email} | #{User.most_compatible_ungrouped_user.leader_score}"
+      create_and_join_group(User.most_compatible_ungrouped_user)
+      
+      # throw most compatible ungrouped users into the schedule-based group
+      # just created
+      fill_up_groups
+      
+      # VALIDATE
+      number_of_potential_teammates = User.most_compatible_ungrouped_user.potential_teammate_count
     end
   end
   
-  def self.group_by_time_blocks
+  # Populates un-full groups with the most comaptible ungrouped users
+  # 
+  # This loops through all groups instead of being called as group.fill_with_ungrouped_users
+  # because all groups are always filled at the same time
+  # 
+  # All groups will always be filled at the same time because users popped out of groups by
+  # kung_foo_shuffle may have a place in a group created after the group they were popped out of
+  # 
+  # Each time fill_up_groups is called, we expect a slightly different set of 
+  # ungrouped users anyway - so we might as well loop through all groups again to make sure
+  # recently ungrouped users have the chance to join "new groups" they never had the chance to join
+  # initially because the "new groups" didn't exist when the user was previously grouped
+  def self.fill_up_groups
+    max_group_size = 8  # how large groups can get
     groups = Group.all
     
     groups.each do |group|
-      ungrouped_users = []
-      users = User.all
-
-      # construct list of users not in a group
-      users.each do |user|
-        ungrouped_users << {"user" => user, "score" => 0} if user.groups.empty?
-      end
+      ungrouped_users = group.most_compatible_candidates
+      free_spots = max_group_size - group.users.count
       
-      # scoring ungrouped users' compatibility with the current group
-      # where ungrouped_user => [user,score]
-      ungrouped_users.each do |ungrouped_user|
-        # +1 per time block in common with the group schedule
-        # if ungrouped user does not have a compatible meeting time, they keep a score of 0 :(
-        if group.has_compatible_meeting_time_with(ungrouped_user["user"])
-          ungrouped_user["score"] = ungrouped_user["user"].number_of_compatible_time_blocks_with(group.schedule)
+      # fill up empty slots if there are eligible members
+      free_spots.times do
+        if !ungrouped_users.empty?
+          group.add_user(ungrouped_users.pop["user"], "schedule")
+          
+          # must update ungrouped_users since group meeting times aren't updated until a 
+          # user is added to the group with group.add_user
+          ungrouped_users = group.most_compatible_candidates
         end
       end
       
-      ungrouped_users.sort! { |b,a| a["score"] <=> b["score"] }
-      delete_old_add_new(ungrouped_users, group)
+      # make sure group has the most compatible members possible
+      # where all users considered are the current group members + all ungrouped users
+      # group.kung_foo_shuffle
     end
   end
   
-  def self.delete_old_add_new(ungrouped_users, group)
-    users_to_be_added = []
-    users_to_be_removed = []
-    max_group_size = 8  # how large groups can get
-    free_spots = max_group_size - group.users.count
-    
-    # fill up empty slots if there are eligible members
-    if free_spots > 0
-      free_spots.times do
-        if !ungrouped_users.empty?
-          user = ungrouped_users.pop
-          score = user["score"]
-          user = user["user"]
-      
-          # only add user to group if they are eligible (aka, have a compatible meeting time)
-          add_to_group(user, group, "schedule") if score > 0
-        end
+  # Returns a sorted array of hashes of ungrouped users
+  # Array sorted by user scores
+  # User score reflects compatiblity with group leader's schedule and compatiblity 
+  # of meeting times
+  def most_compatible_candidates
+    ungrouped_users = []
+    users = User.all
+    group_leader = User.find(self.creator)
+
+    # construct list of ungrouped users that are compatible with this group
+    # where ungrouped_user => {user,score}
+    # 
+    # where a user is compatible with a group if the user has 1+ meeting times in common with
+    # the group meeting times AND has 1+ time blocks in common with the group leader
+    # 
+    # scoring ungrouped users' compatibility with the current group:
+    # score => +1 per time block in common with the group leader's schedule
+    users.each do |user|
+      score = user.number_of_compatible_time_blocks_with(group_leader.schedule)
+      if self.has_compatible_meeting_time_with(user) and score > 0
+        ungrouped_users << {"user" => user, "score" => score} if user.groups.empty?
       end
     end
+    
+    # returns ungrouped_users sorted by score, highest -> lowest
+    ungrouped_users.sort! { |b,a| a["score"] <=> b["score"] }
+  end
+  
+  # CURRENTLY ABANDONED - time cost too high in context :(
+  # 
+  # Shuffle ungrouped users into group so that group has the most
+  # compatible members possible
+  def kung_foo_shuffle
+    ungrouped_users = self.most_compatible_candidates
+    least_compatible_member_comaptibility_score = self.least_compatible_member.memberships.first.compatibility_score
     
     # while the highest-scoring non-grouped user is compatible with this group
     # while the highest-scoring non-grouped user has a higher compatibility score than the least compatible current group member
     # remove least compatible current group member and add the most compatbile non-grouped user
-    while !ungrouped_users.empty? and ungrouped_users.first["score"] > 0 and ungrouped_users.first["score"] > group.least_compatible_member.memberships.first.compatibility_score
-      least_compatible_member = group.least_compatible_member
-      least_compatible_member.memberships.first.destroy
-      group.reset_meeting_times
-      group.reset_schedule
-      add_to_group(ungrouped_users.pop["user"], group, "schedule")
+    while !ungrouped_users.empty? and ungrouped_users.first["score"] > least_compatible_member_comaptibility_score
+      self.least_compatible_member.memberships.first.destroy
+      self.reset_meeting_times
+      self.reset_schedule
+      self.add_user(ungrouped_users.pop["user"], "schedule")
+      
+      # must update ungrouped_users since group meeting times aren't updated until a 
+      # user is added to the group with group.add_user
+      ungrouped_users = self.most_compatible_candidates
+      
+      least_compatible_member_comaptibility_score = self.least_compatible_member.memberships.first.compatibility_score
     end
   end
   
-  # returns the least-compatible group member
-  # returns false if there is no least-compatible group member (un-freaking-likely)
+  # Returns the least-compatible group member
   def least_compatible_member
-    least_compatible_member = User.where(:id => self.creator).first
+    least_compatible_member = User.find(self.creator)
     lowest_compatibility_score = 42 # the highest possible score (aka, the group creator's score)
-    members = self.users
+    group = Group.where(:creator => self.creator).first
+    members = group.users
     
     members.each do |member|
-      logger.debug "NIL MEMBER: #{member.email} #{member.memberships}"
-      if member != nil
-        member_score = member.memberships.first.compatibility_score
-        if member_score < lowest_compatibility_score
-          lowest_compatibility_score = member_score
-          least_compatible_member = member
-        end
+      # logger.debug "NIL MEMBER: #{member.email} #{member.memberships}"
+      member_score = member.memberships.first.compatibility_score
+      if member_score < lowest_compatibility_score
+        lowest_compatibility_score = member_score
+        least_compatible_member = member
       end
     end
     

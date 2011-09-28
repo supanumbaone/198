@@ -5,6 +5,16 @@ class Schedule < ActiveRecord::Base
   
   attr_accessible :name, :description, :user_id, :group_id
   
+  def time_blocks_count
+    time_blocks_count = 0
+    
+    self.days.each do |day|
+      day.time_blocks.count.times { time_blocks_count += 1 }
+    end
+    
+    time_blocks_count
+  end
+  
   def self.export_object
     users = User.all
     days = %w(Monday Tuesday Wednesday Thursday Friday Saturday Sunday)
