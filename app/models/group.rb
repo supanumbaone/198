@@ -20,15 +20,23 @@ class Group < ActiveRecord::Base
   # validates_length_of :description, :within => 2..1500, :too_long => "must be at most 1500 characters", :too_short => "must be at least 2 characters"
   # validates_size_of :profile_image, :maximum => 5.megabytes
   
-  def score
-    self.friend_score + self.meeting_score + self.schedule_score
-  end
   
-  # how large groups can get
+  #############################
+  ###  Attribute Functions  ###
+  #############################
+  
+  # Returns how large groups can get
   def self.max_group_size
     8
   end
   
+  
+  ###################################
+  ###  Admin Interface Functions  ###
+  ###################################
+  
+  # Returns an array of strings for all users, where each string contains a user's
+  # grouping information
   def self.export
     groups = Group.all
     days = %w(Monday Tuesday Wednesday Thursday Friday Saturday Sunday)
@@ -72,6 +80,11 @@ class Group < ActiveRecord::Base
     export_users
   end
   
+  
+  ######################################
+  ###  Grouping Algorithm Functions  ###
+  ######################################
+  
   # Priority for grouping users:
   #   1. Compatibility
   #   2. Friends
@@ -85,6 +98,8 @@ class Group < ActiveRecord::Base
     group_by_time_blocks
     group_ungrouped_users
   end
+  
+  ###  Clean Up Groups Functions  ###
   
   # Destroys all groups and memberships
   def self.clean_up_groups
@@ -100,6 +115,9 @@ class Group < ActiveRecord::Base
     end
   end
   
+  
+  ###  Group By Friends Functions  ###
+  
   # Creates groups and throws users with preferred teammates into them
   # 
   # User is grouped with all preferred teammates with two constraints:
@@ -109,7 +127,6 @@ class Group < ActiveRecord::Base
   # Compatibility:
   #   User has 1+ meeting times (discussion_section_x's) in common with group
   def self.group_by_friends
-    max_group_size = 8  # how large groups can get
     users_with_preferred_teammates = []
     users = User.all
     
@@ -131,7 +148,7 @@ class Group < ActiveRecord::Base
         preferred_teammate = User.where(:email => teammate).first
         
         # preferred teammates can only join if they have a compatible meeting time with the group
-        if preferred_teammate and group.has_compatible_meeting_time_with(user) and group.users.count < max_group_size
+        if preferred_teammate and group.has_compatible_meeting_time_with(user) and group.users.count < Group.max_group_size
           group.add_user(preferred_teammate, "friend")
         end
         
@@ -150,7 +167,6 @@ class Group < ActiveRecord::Base
   # Compatibility:
   #   User has 1+ meeting times (discussion_section_x's) in common with group
   def self.find_group_for(user)
-    max_group_size = 8  # how large groups can get
     groups = Group.all
     
     # if there are no groups, create one
@@ -162,8 +178,8 @@ class Group < ActiveRecord::Base
     else
       groups.each do |group|
         # if group is not full
-        if group.users.count < max_group_size
-          available_spots = max_group_size - group.users.count
+        if group.users.count < Group.max_group_size
+          available_spots = Group.max_group_size - group.users.count
           spots_required = user.preferred_available_teammates.count + 1
           # if group has enough spots for current user and all his preferred teammates
           if available_spots >= spots_required
@@ -333,6 +349,9 @@ class Group < ActiveRecord::Base
     return false
   end
   
+  
+  ###  Group By Time Blocks Functions  ###
+  
   # 1. Fills up groups created by group_by_friends
   # 2. Continues to create and fill groups as long as there are <tt>smallest_group_size</tt>
   #    or more ungrouped, compatible users at the point of group creation
@@ -377,12 +396,11 @@ class Group < ActiveRecord::Base
   # recently ungrouped users have the chance to join "new groups" they never had the chance to join
   # initially because the "new groups" didn't exist when the user was previously grouped
   def self.fill_up_groups
-    max_group_size = 8  # how large groups can get
     groups = Group.all
     
     groups.each do |group|
       ungrouped_users = group.most_compatible_candidates
-      free_spots = max_group_size - group.users.count
+      free_spots = Group.max_group_size - group.users.count
       
       # fill up empty slots if there are eligible members
       free_spots.times do
@@ -472,6 +490,9 @@ class Group < ActiveRecord::Base
     
     least_compatible_member
   end
+  
+  
+  ###  Group Ungrouped Users Functions  ###
   
   # Throws all ungrouped users into a catch-all group: "ungrouped_users"
   def self.group_ungrouped_users

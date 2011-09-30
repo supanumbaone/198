@@ -48,6 +48,16 @@ class User < ActiveRecord::Base
     update_attributes(params) 
   end
   
+  
+  #############################
+  ###  Attribute Functions  ###
+  #############################
+  
+  # Returns user's full name
+  def name
+    self.first_name + " " + self.last_name
+  end
+  
   # Does the user already have a schedule?
   def has_schedule?
     self.schedule != nil
@@ -88,6 +98,66 @@ class User < ActiveRecord::Base
     
     self.preferred_teammates
   end
+  
+  
+  ####################################
+  ###  Database Utility Functions  ###
+  ####################################
+  
+  # Generates a seeds file for the current users table
+  def self.generate_seeds
+    users = User.all
+    seeds_content = "# This seeds file was generated on:  #{Time.now.strftime("%m/%d/%Y at %I:%M %p")}"
+    
+    users.each do |user|
+      seeds_content += "\n\n"
+      seeds_content += "#  #{user.name}\n"
+      seeds_content += "user = User.create(\n"
+      seeds_content += "  :email                  => '#{user.email}',\n"
+      seeds_content += "  :password               => 'password',\n"
+      seeds_content += "  :password_confirmation  => 'password',\n"
+      seeds_content += "  :first_name             => '#{user.first_name}',\n"
+      seeds_content += "  :last_name              => '#{user.last_name}',\n"
+      seeds_content += "  :discussion_section_1   => #{user.discussion_section_1},\n"
+      seeds_content += "  :discussion_section_2   => #{user.discussion_section_2},\n"
+      seeds_content += "  :discussion_section_3   => #{user.discussion_section_3},\n"
+      seeds_content += "  :preferred_teammates    => '#{user.preferred_teammates}'\n"
+      seeds_content += ")\n"
+      
+      if user.has_schedule?
+        seeds_content += "schedule = Schedule.create(\n"
+        seeds_content += "  :user_id => user.id\n"
+        seeds_content += ")\n"
+        
+        day_count = 0
+        time_block_content = "TimeBlock.create([\n"
+        seeds_content += "days = Day.create([\n"
+        user.schedule.days.each do |day|
+          seeds_content += "  {:name => '#{day.name}', :schedule_id => schedule.id},\n"
+          day.time_blocks.each do |time_block|
+            time_block_content += "  {:chunk_of_time => '#{time_block.chunk_of_time}', :day_id => days[#{day_count}].id},\n"
+          end
+          day_count += 1
+        end
+        seeds_content = seeds_content[0..-3] + "\n" + "])\n"  # gets rid of last ",\n" then adds "\n"
+        time_block_content = time_block_content[0..-3] + "\n" + "])\n"
+        seeds_content += time_block_content
+      end
+    end
+    
+    # Creating and writing to the seeds file
+    # File name example: seeds_04-09-2003_0823.rb
+    # Saves seeds docs to /public/exports
+    time = Time.now.strftime("%m-%d-%Y_%I%M")  # => "04-09-2003_0823"
+    file_name = "seeds_#{time}.rb"
+    export_path = "#{RAILS_ROOT}/public/exports/" + file_name
+    File.open(export_path, "w") { |f| f << seeds_content }
+  end
+  
+  
+  ######################################
+  ###  Grouping Algorithm Functions  ###
+  ######################################
   
   # Returns the user that could be a compatible teammate with the highest
   # number of ungrouped users
@@ -210,6 +280,11 @@ class User < ActiveRecord::Base
     compatibilities
   end
   
+  
+  ###########################################
+  ###  Dynamic Record Creation Functions  ###
+  ###########################################
+  
   # Given a schedule, create days with dates
   # Where a chunk_of_time is "morning" | "afternoon" | "evening"
   def add_date_chunks_to_schedule(time_blocks, schedule)
@@ -282,6 +357,32 @@ class User < ActiveRecord::Base
     end
   end
   
+  
+  ##########################################
+  ###  Ben's Algorithm Bridge Functions  ###
+  ##########################################
+  
+  require 'csv'
+  def self.import_user_groupings
+    file_name = "users.csv"
+    import_path = "#{Rails.root}/public/imports/" + file_name
+    users = User.all
+    
+    CSV.foreach(import_path) do |row|
+      users.each do |user|
+        if user.email == row[0]
+          group = Group.where(:name => row[1]).first
+          if !group
+            group = Group.new(:name => row[1])
+            group.save
+          end
+          membership = Membership.new(:group_id => group.id, :user_id => user.id)
+          membership.save
+        end
+      end
+    end
+  end
+  
   def self.export_object
     users = User.all
     users_to_be_exported = []
@@ -332,8 +433,26 @@ class User < ActiveRecord::Base
   end
   
   
-  #input a string of newlined, roster from excel
-  #call this function and it returns the roster with just emails
+  ###############################################
+  ###  Temporary Database-Specific Functions  ###
+  ###############################################
+  
+  # Returns array of unregistered users from the full class roster
+  # Look at get_class_roster for more information
+  def self.get_unregistered_users
+    registered_emails = Array.new
+    full_roster = get_class_roster
+    users = User.all
+    for u in users
+      registered_emails << u.email.strip.downcase
+    end
+    
+    unregistered_emails = full_roster - registered_emails
+    return unregistered_emails
+  end
+  
+  # Input a string of newlined, roster from excel
+  # Call this function and it returns the roster with just emails
   def self.get_class_roster
     roster_string = "Almada, Elioth Arturo	ealmada@ucsd.edu
     An, Hyeong Min	hman@ucsd.edu
@@ -472,54 +591,4 @@ class User < ActiveRecord::Base
     roster = roster.sort
     return roster
   end
-  
-  #returns array of unregistered users from the full class roster
-  #look at get_class_roster for more information
-  def self.get_unregistered_users
-    registered_emails = Array.new
-    full_roster = get_class_roster
-    users = User.all
-    for u in users
-      registered_emails << u.email.strip.downcase
-    end
-    
-    unregistered_emails = full_roster - registered_emails
-    return unregistered_emails
-  end
-  
-  
-  require 'csv'
-  def self.import_user_groupings
-    file_name = "users.csv"
-    import_path = "#{Rails.root}/public/imports/" + file_name
-    users = User.all
-    
-    CSV.foreach(import_path) do |row|
-      users.each do |user|
-        if user.email == row[0]
-          group = Group.where(:name => row[1]).first
-          if !group
-            group = Group.new(:name => row[1])
-            group.save
-          end
-          membership = Membership.new(:group_id => group.id, :user_id => user.id)
-          membership.save
-        end
-      end
-    end
-  end
-  
-  # def self.get_friends(user, group_size, max_size)
-    # friends = user.preferred_teammates.split(",")
-    # if !friends.blank?
-      # while f < friends.length && group_size < max_size
-        # friend = User.where(:email => friends[f])
-        # if friend && friend.groups.blank?
-          
-        # end
-        
-        # f += 1
-      # end
-    # end
-  # end
 end
