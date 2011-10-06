@@ -18,6 +18,6 @@ gem 'thinking-sphinx',
 gem 'delayed_job'
 gem "mocha", :group => :test
 gem 'acts-as-taggable-on'
-gem 'rmagick'
-gem 'carrierwave'
+# gem 'rmagick'
+# gem 'carrierwave'
 gem 'acts_as_commentable_with_threading'

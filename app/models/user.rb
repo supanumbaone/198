@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
   # Alias for <tt>acts_as_taggable_on :tags</tt>: <tt>acts_as_taggable</tt>  
   acts_as_taggable_on :interests
   
-  mount_uploader :profile_image, ProfileImageUploader
+  # mount_uploader :profile_image, ProfileImageUploader
 
   attr_accessible :email, :password, :password_confirmation, :remember_me, :first_name, :last_name, 
                   :birthday, :about, :location, :school, :occupation, :aim, :live, :skype, 
