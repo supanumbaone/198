@@ -10,7 +10,7 @@ class Group < ActiveRecord::Base
   # Implementing acts_as_commentable_with_threading
   acts_as_commentable
   
-  mount_uploader :profile_image, ProfileImageUploader
+  # mount_uploader :profile_image, ProfileImageUploader
   
   attr_accessible :name, :description, :invited_users, :max_members, :total_members, :privacy, :creator, :interest_list,
                   :profile_image, :discussion_section_1, :discussion_section_2, :discussion_section_3
