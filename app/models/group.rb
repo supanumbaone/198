@@ -30,6 +30,11 @@ class Group < ActiveRecord::Base
     8
   end
   
+  # Returns how small groups can be
+  def self.min_group_size
+    7
+  end
+  
   
   ###################################
   ###  Admin Interface Functions  ###
@@ -148,7 +153,7 @@ class Group < ActiveRecord::Base
         preferred_teammate = User.where(:email => teammate).first
         
         # preferred teammates can only join if they have a compatible meeting time with the group
-        if preferred_teammate and group.has_compatible_meeting_time_with(preferred_teammate) and group.users.count < Group.max_group_size
+        if preferred_teammate and group.has_compatible_meeting_time_with(preferred_teammate) and preferred_teammate.groups.empty? and group.users.count < Group.max_group_size
           group.add_user(preferred_teammate, "friend")
         end
         
@@ -185,7 +190,7 @@ class Group < ActiveRecord::Base
           if available_spots >= spots_required
             # if at least 1 of user's monday availabilities mach up with the group's
             if user.groups.empty? and group.has_compatible_meeting_time_with(user)
-              group.add_user(user, "meeting") # may want to change BACK to friend..
+              group.add_user(user, "meeting")
             end
           end
         end
@@ -209,47 +214,33 @@ class Group < ActiveRecord::Base
   # Determines a compatibility score between user and group, then creates membership
   # Membership also stores the compatibility score
   # 
-  # **This function is fucking ugly. Why?
-  #   1. Validating for if a user should be added to a group should not have to happen here
-  #     a. checks AGAIN to make sure user has compatible meeting times with group
-  #     b. checks AGAIN to make sure user is not in a group yet
+  # Compatibility score is in respect to group leader's schedule (as opposed to group's
+  # schedule) as to not shaft members that join later
   def add_user(user, reason)
     compatibility_score = 0
     group_leader = User.find(self.creator)
     
-    # compatibility should be checked against the group schedule
-    # but
-    # compatibility score should be in respect to group leader's schedule
-    # as to not shaft members that join later
+    # initializing <tt>group</tt> because of something funky going on with <tt>self</tt> in this context
+    group = Group.where(:creator => self.creator).first
+    
     case reason
     when "creator"
       compatibility_score += 42
-      
       self.initialize_group_meeting_times(user)
       self.initialize_group_schedule(user.schedule)  # leader must have a schedule..
-      Membership.create(:group_id => self.id, :user_id => user.id, :compatibility_score => compatibility_score)
     when "friend"
       compatibility_score += 21
       compatibility_score += user.number_of_compatible_time_blocks_with(group_leader.schedule)
-      
-      # initializing <tt>group</tt> because of something funky going on with <tt>self</tt> in this context
-      group = Group.where(:creator => self.creator).first
-      if group.has_compatible_meeting_time_with(user) and user.groups.empty?
-        group.update_group_meeting_times(user)
-        group.update_group_schedule(user.schedule) if user.schedule != nil
-        Membership.create(:group_id => self.id, :user_id => user.id, :compatibility_score => compatibility_score)
-      end
     else
       compatibility_score += user.number_of_compatible_time_blocks_with(group_leader.schedule)
-      
-      # initializing <tt>group</tt> because of something funky going on with <tt>self</tt> in this context
-      group = Group.where(:creator => self.creator).first
-      if group.has_compatible_meeting_time_with(user) and user.groups.empty?
-        group.update_group_meeting_times(user)
-        group.update_group_schedule(user.schedule) if user.schedule != nil
-        Membership.create(:group_id => self.id, :user_id => user.id, :compatibility_score => compatibility_score)
-      end
     end
+    
+    if reason != "creator"
+      group.update_group_meeting_times(user)
+      group.update_group_schedule(user.schedule) if user.schedule != nil
+    end
+    
+    Membership.create(:group_id => self.id, :user_id => user.id, :compatibility_score => compatibility_score)
   end
   
   # Group meeting times = intersection of all user's meeting preferences
@@ -377,10 +368,9 @@ class Group < ActiveRecord::Base
     fill_up_groups
     
     # smallest group size allowed for the last group created
-    smallest_permitted_group_size = Group.max_group_size - 3
     number_of_potential_teammates = User.most_compatible_ungrouped_user.potential_teammate_count
     
-    while number_of_potential_teammates > smallest_permitted_group_size
+    while number_of_potential_teammates > Group.min_group_size
       create_and_join_group(User.most_compatible_ungrouped_user)
       
       # throw most compatible ungrouped users into the schedule-based group
@@ -416,14 +406,13 @@ class Group < ActiveRecord::Base
       free_spots = Group.max_group_size - group.users.count
       
       # fill up empty slots if there are eligible members
-      free_spots.times do
-        if !ungrouped_users.empty?
-          group.add_user(ungrouped_users.first["user"], "schedule")
-          
-          # must update ungrouped_users since group meeting times aren't updated until a 
-          # user is added to the group with group.add_user
-          ungrouped_users = group.most_compatible_candidates
-        end
+      while free_spots > 0 and !ungrouped_users.empty?
+        group.add_user(ungrouped_users.first["user"], "schedule")
+        free_spots -= 1
+        
+        # must update ungrouped_users since group meeting times aren't updated until a 
+        # user is added to the group with group.add_user
+        ungrouped_users = group.most_compatible_candidates
       end
       
       # make sure group has the most compatible members possible
@@ -440,6 +429,7 @@ class Group < ActiveRecord::Base
     ungrouped_users = []
     users = User.all
     group_leader = User.find(self.creator)
+    group = Group.find(self.id)  # another situation where <tt>self</tt> fucks up in context
 
     # construct list of ungrouped users that are compatible with this group
     # where ungrouped_user => {user,score}
@@ -452,7 +442,7 @@ class Group < ActiveRecord::Base
     users.each do |user|
       if user.groups.empty?
         score = user.number_of_compatible_time_blocks_with(group_leader.schedule)
-        if self.has_compatible_meeting_time_with(user)
+        if group.has_compatible_meeting_time_with(user)
           ungrouped_users << {"user" => user, "score" => score}
         end
       end
