@@ -7,12 +7,13 @@
 #   http://dev.mysql.com/doc/refman/5.0/en/old-client.html
 development:
   adapter: mysql2
+  host: 127.0.0.1
   encoding: utf8
   reconnect: false
   database: grooopme_development
   pool: 5
   username: root
-  password:
+  password: e04su3su;6
   socket: /tmp/mysql.sock
 
 # Warning: The database defined as "test" will be erased and

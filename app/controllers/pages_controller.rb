@@ -16,6 +16,7 @@ class PagesController < ApplicationController
   
   def roster
     @users = Group.export
+    @memberships = Membership.all
     render :layout => "stretched"
   end
   

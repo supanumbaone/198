@@ -45,11 +45,12 @@ class Group < ActiveRecord::Base
     # export_users << "Name,Email,,M,,,T,,,W,,,Th,,,F,,,S,,,Su,,Preferred Friends"
     # export_users << ",,am,noon,pm,am,noon,pm,am,noon,pm,am,noon,pm,am,noon,pm,am,noon,pm,am,noon,pm,"
     groups.each do |group|
-      group.users.each do |user|
+        group.users.each do |user|
         user_days = []
         user_line = []
         7.times { user_days << ["","",""] }
-        user_line << user.last_name
+        user_line << user.memberships.first.compatibility_score  #to get compatibility score? hopefully :( alvin
+	user_line << user.last_name
         user_line << user.first_name
         user_line << user.email
         user_line << group.name
@@ -93,10 +94,15 @@ class Group < ActiveRecord::Base
   # Compatibility:
   #   User has 1+ meeting times (discussion_section_x's) in common with group
   def self.group_users
+    puts "Cleaning up..."
     clean_up_groups
+    puts "Group by friends..."
     group_by_friends
+    puts "Group by time blocks..."
     group_by_time_blocks
+    puts "taking care of leftovers.."
     group_ungrouped_users
+
   end
   
   ###  Clean Up Groups Functions  ###
