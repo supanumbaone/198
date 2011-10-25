@@ -4519,29 +4519,6 @@ TimeBlock.create([
 ])
 
 
-#  Brent Bahry
-user = User.create(
-  :email                  => 'bbahry@ucsd.edu',
-  :password               => 'password',
-  :password_confirmation  => 'password',
-  :first_name             => 'Brent',
-  :last_name              => 'Bahry',
-  :discussion_section_1   => 1,
-  :discussion_section_2   => 0,
-  :discussion_section_3   => 0,
-  :preferred_teammates    => ''
-)
-schedule = Schedule.create(
-  :user_id => user.id
-)
-days = Day.create([
-  {:name => 'Monday', :schedule_id => schedule.id}
-])
-TimeBlock.create([
-  {:chunk_of_time => 'morning', :day_id => days[0].id}
-])
-
-
 #  Austin Hill
 user = User.create(
   :email                  => 'a2hill@ucsd.edu',
