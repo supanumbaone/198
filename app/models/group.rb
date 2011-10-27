@@ -206,6 +206,7 @@ class Group < ActiveRecord::Base
     # if the user and his preferred teammates couldn't be fit into an existing 
     # group, create a new one
     if user.groups.empty?
+	puts "creating group" + String(Group.all.length) +" out of " + String(User.all.length/8)
       create_and_join_group(user)
     end
   end
