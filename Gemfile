@@ -1,11 +1,10 @@
 source 'http://rubygems.org'
 
 gem 'rails', '3.0.5'
-
+gem 'rake', '0.8.7'
 gem 'mysql2'
 gem 'cancan'
-gem 'devise',
-	:git	=> 'https://github.com/plataformatec/devise.git'
+gem 'devise'
 gem 'paperclip'
 gem 'nifty-generators'
 gem 'capistrano'
